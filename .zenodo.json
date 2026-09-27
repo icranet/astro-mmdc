@@ -1,0 +1,43 @@
+{
+  "upload_type": "software",
+  "title": "astro-mmdc: Python SDK for the Markarian Multiwavelength Data Center (MMDC)",
+  "creators": [
+    {
+      "name": "Vardanyan, Vazgen",
+      "orcid": "0000-0002-3777-7580"
+    },
+    {
+      "name": "Sahakyan, Narek",
+      "orcid": "0000-0003-2011-2731"
+    }
+  ],
+  "description": "Python SDK for the Markarian Multiwavelength Data Center (MMDC, https://mmdc.am): retrieval of multiwavelength spectral energy distributions and light curves of blazars and other sources, on-demand Swift UVOT/XRT analysis, and broadband emission modeling of blazars with SSC, EIC and hadronic models. If you use it, please cite Sahakyan et al. 2024, AJ, 168, 289 (doi:10.3847/1538-3881/ad8231). Data retrieved through MMDC is licensed CC BY 4.0 and requires attribution.",
+  "license": "bsd-3-clause",
+  "keywords": [
+    "astrophysics",
+    "astronomy",
+    "blazar",
+    "spectral energy distribution",
+    "SED",
+    "multiwavelength",
+    "light curve",
+    "Swift",
+    "UVOT",
+    "XRT",
+    "Fermi",
+    "modeling",
+    "MMDC"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.3847/1538-3881/ad8231",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "https://mmdc.am",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    }
+  ]
+}
