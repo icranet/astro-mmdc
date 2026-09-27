@@ -113,8 +113,8 @@ SED preparation fetches multi-wavelength observational data from external catalo
 
 ```python
 job = client.sed.prepare_and_wait(
-    ra=187.28,              # Right Ascension in degrees
-    dec=2.05,               # Declination in degrees
+    ra=187.2779,            # Right Ascension in degrees
+    dec=2.0524,             # Declination in degrees
     database_name="3C273",  # Database identifier
     source_name="3C 273",   # Optional display name
 )
@@ -128,7 +128,7 @@ An `error` status is returned, not raised; pass `raise_on_error=True` to get
 If data already exists for a sky position, MMDC returns the cached result. Use `force=True` to re-fetch:
 
 ```python
-job = client.sed.prepare_and_wait(ra=187.28, dec=2.05, database_name="3C273", force=True)
+job = client.sed.prepare_and_wait(ra=187.2779, dec=2.0524, database_name="3C273", force=True)
 ```
 
 ### Retrieving SED Data

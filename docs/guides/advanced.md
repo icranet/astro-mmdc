@@ -10,7 +10,7 @@ This is useful when you want to submit multiple jobs at once and poll them indep
 
 ```python
 # Submit — returns immediately
-job = client.sed.prepare(ra=187.28, dec=2.05, database_name="3C273")
+job = client.sed.prepare(ra=187.2779, dec=2.0524, database_name="3C273")
 print(job.uuid)
 
 # Check status manually
@@ -81,9 +81,9 @@ Submitting the same request twice while it is still running returns the running 
 import time
 
 sources = [
-    {"ra": 187.28, "dec": 2.05, "name": "3C273"},
-    {"ra": 166.11, "dec": 38.21, "name": "Mkn421"},
-    {"ra": 253.47, "dec": 39.76, "name": "Mkn501"},
+    {"ra": 187.2779, "dec": 2.0524, "name": "3C273"},
+    {"ra": 166.1138, "dec": 38.2088, "name": "Mkn421"},
+    {"ra": 253.4676, "dec": 39.7602, "name": "Mkn501"},
 ]
 
 # Submit all jobs first

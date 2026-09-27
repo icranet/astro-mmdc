@@ -12,7 +12,7 @@ pip install astro-mmdc
 from astro_mmdc import MMDC
 
 client = MMDC()
-sed = client.sed.get(ra=187.28, dec=2.05, name="3C 273")
+sed = client.sed.get(ra=187.2779, dec=2.0524, name="3C 273")
 print(sed.source.redshift, sed.points)
 ```
 

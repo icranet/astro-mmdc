@@ -52,7 +52,7 @@ client = MMDC(app="my-project", api_key="mmdc_...")
 
 def handle(request):
     mmdc = client.for_user(request.user.id)
-    return mmdc.observations.cone_search(ra=187.28, dec=2.05)
+    return mmdc.observations.cone_search(ra=187.2779, dec=2.0524)
 ```
 
 `end_user` is an opaque id of your choice: 1–64 characters from letters, digits and `. _ : -`, never an email. Anything else raises `ValueError` at construction. MMDC records it only when a valid `api_key` is sent, and uses it for per-user usage statistics.
@@ -72,7 +72,7 @@ Get the SED of a source in 3 lines:
 from astro_mmdc import MMDC
 
 client = MMDC()
-sed = client.sed.get(ra=187.28, dec=2.05, name="3C 273")
+sed = client.sed.get(ra=187.2779, dec=2.0524, name="3C 273")
 print(sed.source.redshift, sed.points)
 ```
 
@@ -93,7 +93,7 @@ print(result.nuFnu)  # Fluxes
 Run Swift UVOT photometry for a source and time window:
 
 ```python
-job = client.madam.analyze(ra=166.11, dec=38.21, mjd_start=58849, mjd_end=59031)
+job = client.madam.analyze(ra=166.1138, dec=38.2088, mjd_start=58849, mjd_end=59031)
 for row in job.results:
     if not row.is_lightcurve:
         print(row.obsid, row.filter_band, row.frequency, row.flux)
@@ -121,7 +121,7 @@ client = MMDC()
 
 # Fetch SED data
 job = client.sed.prepare_and_wait(
-    ra=166.11, dec=38.21, database_name="Mkn421", source_name="Mkn 421"
+    ra=166.1138, dec=38.2088, database_name="Mkn421", source_name="Mkn 421"
 )
 info = client.sed.get_info(job.uuid)
 client.sed.download_csv(job.uuid, "mkn421_sed.csv")
