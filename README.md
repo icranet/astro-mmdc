@@ -7,7 +7,7 @@ Python SDK for the [MMDC astrophysics platform](https://mmdc.am): multi-waveleng
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)](https://github.com/icranet/astro-mmdc/blob/main/LICENSE)
 [![Tests](https://github.com/icranet/astro-mmdc/actions/workflows/tests.yml/badge.svg)](https://github.com/icranet/astro-mmdc/actions/workflows/tests.yml)
 [![Docs](https://img.shields.io/badge/docs-docs.mmdc.am-blue)](https://docs.mmdc.am)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22999175.svg)](https://doi.org/10.5281/zenodo.22999175)
+[![DOI](https://zenodo.org/badge/1391012117.svg)](https://doi.org/10.5281/zenodo.22999175)
 
 The [Markarian Multiwavelength Data Center (MMDC)](https://mmdc.am) gathers multi-wavelength, multi-epoch observations of blazars and other sources from dozens of catalogues and archives. It also models their broadband emission with SSC, EIC and hadronic models, and this SDK gives Python access to all of it.
 
