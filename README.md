@@ -7,7 +7,7 @@ Python SDK for the [MMDC astrophysics platform](https://mmdc.am): multi-waveleng
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)](https://github.com/icranet/astro-mmdc/blob/main/LICENSE)
 [![Tests](https://github.com/icranet/astro-mmdc/actions/workflows/tests.yml/badge.svg)](https://github.com/icranet/astro-mmdc/actions/workflows/tests.yml)
 [![Docs](https://img.shields.io/badge/docs-docs.mmdc.am-blue)](https://docs.mmdc.am)
-<!-- DOI badge: add the Zenodo DOI badge here once the first release is archived. -->
+[![DOI](https://zenodo.org/badge/1391012117.svg)](https://doi.org/10.5281/zenodo.22999175)
 
 The [Markarian Multiwavelength Data Center (MMDC)](https://mmdc.am) gathers multi-wavelength, multi-epoch observations of blazars and other sources from dozens of catalogues and archives. It also models their broadband emission with SSC, EIC and hadronic models, and this SDK gives Python access to all of it.
 
@@ -63,6 +63,7 @@ The [Getting started](https://docs.mmdc.am/getting-started/) page has more examp
 - Documentation: [docs.mmdc.am](https://docs.mmdc.am)
 - MMDC platform: [mmdc.am](https://mmdc.am)
 - Paper: Sahakyan et al. 2024, AJ, 168, 289, [doi:10.3847/1538-3881/ad8231](https://doi.org/10.3847/1538-3881/ad8231)
+- Software DOI (Zenodo): [doi:10.5281/zenodo.22999175](https://doi.org/10.5281/zenodo.22999175)
 - Issues: [github.com/icranet/astro-mmdc/issues](https://github.com/icranet/astro-mmdc/issues)
 
 ## Citing
@@ -88,7 +89,7 @@ If you use MMDC data, models or this SDK in your research, please cite the MMDC 
 ```
 
 Data retrieved through MMDC is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-and requires attribution. Citation metadata for the SDK itself is in [`CITATION.cff`](https://github.com/icranet/astro-mmdc/blob/main/CITATION.cff).
+and requires attribution. The SDK itself is archived on Zenodo, [doi:10.5281/zenodo.22999175](https://doi.org/10.5281/zenodo.22999175) (all versions); its citation metadata is in [`CITATION.cff`](https://github.com/icranet/astro-mmdc/blob/main/CITATION.cff).
 
 ## License
 

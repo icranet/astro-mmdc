@@ -21,4 +21,4 @@ If you use MMDC data, models or this SDK in your research, please cite the MMDC 
 ```
 
 Data retrieved through MMDC is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-and requires attribution. Citation metadata for the SDK itself is in [`CITATION.cff`](https://github.com/icranet/astro-mmdc/blob/main/CITATION.cff).
+and requires attribution. The SDK itself is archived on Zenodo, [doi:10.5281/zenodo.22999175](https://doi.org/10.5281/zenodo.22999175) (all versions); its citation metadata is in [`CITATION.cff`](https://github.com/icranet/astro-mmdc/blob/main/CITATION.cff).
