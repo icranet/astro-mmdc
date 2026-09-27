@@ -1,0 +1,63 @@
+site_name: astro-mmdc
+site_description: Python SDK for the MMDC astrophysics platform
+site_url: https://docs.mmdc.am/
+repo_url: https://github.com/icranet/astro-mmdc
+repo_name: icranet/astro-mmdc
+edit_uri: edit/main/docs/
+copyright: ICRANet MMDC Team. SDK licensed under BSD-3-Clause; MMDC data under CC BY 4.0.
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+
+plugins:
+  - search
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Guides:
+      - SED data: guides/sed.md
+      - Observations: guides/observations.md
+      - Swift UVOT/XRT analysis: guides/swift.md
+      - Blazar emission modeling: guides/modeling.md
+      - Results & errors: guides/results-errors.md
+      - Advanced: guides/advanced.md
+  - API reference: api.md
+  - Citing: citing.md
+  - Changelog: changelog.md
