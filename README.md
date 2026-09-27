@@ -4,7 +4,7 @@ Python SDK for the [MMDC astrophysics platform](https://mmdc.am): multi-waveleng
 
 [![PyPI](https://img.shields.io/pypi/v/astro-mmdc)](https://pypi.org/project/astro-mmdc/)
 [![Python versions](https://img.shields.io/pypi/pyversions/astro-mmdc)](https://pypi.org/project/astro-mmdc/)
-[![License](https://img.shields.io/pypi/l/astro-mmdc)](https://github.com/icranet/astro-mmdc/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)](https://github.com/icranet/astro-mmdc/blob/main/LICENSE)
 [![Tests](https://github.com/icranet/astro-mmdc/actions/workflows/tests.yml/badge.svg)](https://github.com/icranet/astro-mmdc/actions/workflows/tests.yml)
 [![Docs](https://img.shields.io/badge/docs-docs.mmdc.am-blue)](https://docs.mmdc.am)
 <!-- DOI badge: add the Zenodo DOI badge here once the first release is archived. -->

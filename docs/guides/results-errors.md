@@ -39,7 +39,7 @@ from astro_mmdc import (
     MMDCError,           # Base exception for all SDK errors
     APIError,            # Non-2xx HTTP response
     NotFoundError,       # 404 response
-    RateLimitError,      # 429 response after retries (.retry_after)
+    RateLimitError,      # 429 response (.retry_after)
     ValidationError,     # 422 response (CSV/parameter validation)
     PollingTimeoutError, # Polling exceeded max wait time
     BatchJobError,       # Batch modeling job failed on the server
@@ -64,4 +64,4 @@ except APIError as e:
     print(f"HTTP {e.status_code}: {e.detail}")
 ```
 
-The SDK automatically retries on transient errors (429, 502, 503, 504) with exponential backoff (up to 3 attempts).
+The SDK retries transient errors (429, 502, 503, 504 and connection errors) with exponential backoff, or after the server's `Retry-After`, up to 3 attempts. It does so only for requests that are safe to repeat: every GET, all `client.sed` calls on the current API (`get`, `submit`, `source`, ...), and `submit_batch` / `batch_infer`, which send an `Idempotency-Key` so that a retry cannot create a second job. The other POSTs are not retried and raise the error at once: `modeling.infer`, `validate_csv`, `csv_to_json`, and the submit request of `madam.submit` / `madam.analyze` and of the older `sed.prepare` / `prepare_and_wait` (the polling that follows is retried).
