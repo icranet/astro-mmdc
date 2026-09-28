@@ -50,14 +50,14 @@ The hadronic model also predicts the neutrino flux, drawn as a dashed curve.
 
 ## Redshift, distance and EBL
 
-- **Redshift z** (0 < z ≤ 10) is required for every run and fit. It is converted to a distance
+- **Redshift z** (0 < z ≤ 4.99) is required for every run and fit. It is converted to a distance
   with a flat cosmology, H₀ = 71 km s⁻¹ Mpc⁻¹ and Ω<sub>m</sub> = 0.27 (Ned Wright's Cosmology
   Calculator).
 - **EBL absorption**, when ticked, attenuates the γ-ray emission by the extragalactic background
   light with model C of
   [Finke, Razzaque & Dermer 2010, ApJ, 712, 238](https://ui.adsabs.harvard.edu/abs/2010ApJ...712..238F/abstract).
-  It is available up to z = 4.99: the optical depths are tabulated every 0.01 in z, and z is
-  rounded to the nearest table. Above z = 4.99 a run or fit with EBL absorption fails.
+  The optical depths are tabulated every 0.01 in z up to z = 4.99, which is why z is limited
+  to 4.99; z is rounded to the nearest table.
 
 ## Parameters
 
