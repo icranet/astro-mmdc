@@ -36,7 +36,7 @@ print(validation.flux_range)       # [min, max]
 ```python
 result = client.modeling.batch_infer(
     "observations.csv",
-    z=0.158,            # Redshift (0 < z <= 10)
+    z=0.158,            # Redshift (0 < z <= 4.99)
     ebl=True,           # EBL absorption correction
     model_type="SSC",
 )
