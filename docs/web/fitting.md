@@ -17,8 +17,8 @@ distribution of every parameter; the result is sent to you by email.
 1. **Upload SED (CSV)** in the Data card and set the **Redshift z** (and **EBL absorption**).
 2. Choose the model: **SSC**, **EIC** or **Hadronic**.
 3. Press **Fit (email)…**, check the summary, fix any parameter you know, enter your email.
-4. Press **Submit fit**. A fit usually runs for a few minutes (at most 15), plus any wait in
-   the queue; the email links to the result.
+4. Press **Submit fit**. A fit runs for at most 15 minutes, plus any wait in the queue; the
+   email links to the result.
 
 ## The data file
 
@@ -116,8 +116,8 @@ queue), and another when it is ready. If the fit fails, an email tells you. The 
 - three downloads: **Corner plot** (the posterior distributions, PDF), **Parameters** (the
   best-fit parameters, CSV) and **Model** (the best-fit SED, CSV).
 
-You can have up to five fits queued or running at a time; a sixth is refused until one of
-them finishes.
+Up to five fits from one network address can be queued or running at a time; a sixth is
+refused until one of them finishes.
 
 ## Your data
 
