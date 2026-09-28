@@ -1,5 +1,5 @@
-site_name: astro-mmdc
-site_description: Python SDK for the MMDC astrophysics platform
+site_name: MMDC documentation
+site_description: Documentation of the Markarian Multiwavelength Data Center (mmdc.am), its website and the astro-mmdc Python SDK
 site_url: https://docs.mmdc.am/
 repo_url: https://github.com/icranet/astro-mmdc
 repo_name: icranet/astro-mmdc
@@ -8,6 +8,7 @@ copyright: ICRANet MMDC Team. SDK licensed under BSD-3-Clause; MMDC data under C
 
 theme:
   name: material
+  custom_dir: overrides
   features:
     - navigation.sections
     - navigation.top
@@ -38,9 +39,23 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.superfences
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - md_in_html
 
 plugins:
   - search
+
+extra:
+  social:
+    - icon: material/web
+      link: https://mmdc.am
+      name: MMDC at mmdc.am
+    - icon: fontawesome/brands/github
+      link: https://github.com/icranet/astro-mmdc
+      name: astro-mmdc on GitHub
 
 validation:
   omitted_files: warn
@@ -50,14 +65,19 @@ validation:
 
 nav:
   - Home: index.md
-  - Getting started: getting-started.md
-  - Guides:
+  - Using the website:
+      - Getting SED data: web/sed-data.md
+      - Blazar SED modeling: web/modeling.md
+      - Fitting your SED: web/fitting.md
+  - Python SDK:
+      - Getting started: getting-started.md
       - SED data: guides/sed.md
       - Observations: guides/observations.md
       - Swift UVOT/XRT analysis: guides/swift.md
       - Blazar emission modeling: guides/modeling.md
       - Results & errors: guides/results-errors.md
       - Advanced: guides/advanced.md
-  - API reference: api.md
+      - API reference: api.md
   - Citing: citing.md
   - Changelog: changelog.md
+  - Open mmdc.am ↗: https://mmdc.am

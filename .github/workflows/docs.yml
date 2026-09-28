@@ -6,6 +6,7 @@ on:
     paths:
       - "docs/**"
       - "mkdocs.yml"
+      - "overrides/**"
       - "src/**"
       - "README.md"
       - "pyproject.toml"
@@ -15,6 +16,7 @@ on:
     paths:
       - "docs/**"
       - "mkdocs.yml"
+      - "overrides/**"
       - "src/**"
       - "README.md"
       - "pyproject.toml"
