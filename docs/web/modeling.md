@@ -20,7 +20,8 @@ fits the models to your own data ([Fitting your SED](fitting.md)).
 
 1. Set the **Redshift z** in the Data card, and tick **EBL absorption** if you want it.
 2. Choose **SSC**, **EIC** or **Hadronic**.
-3. Enter the parameters, or use **Run model ▾ → Load example** for a tested set.
+3. Enter the parameters, or use **Run model ▾ → Load example** for a tested set
+   (**Load example (Mrk 421)** for SSC).
 4. Press **Run model**. The SED appears on the plot.
 
 A value outside its range is shown in red with the allowed range; the range of every field is
@@ -42,7 +43,7 @@ physical model. The trained networks are used with
 | Model | What it describes |
 |---|---|
 | **SSC**, synchrotron self-Compton | Electrons in one spherical blob emit synchrotron photons and up-scatter them by inverse Compton. |
-| **EIC**, external inverse Compton | As SSC, and the electrons also up-scatter photons from the broad-line region (BLR) and the dusty torus (DT). |
+| **EIC**, external inverse Compton | As SSC, and the electrons also up-scatter photons from the broad-line region (BLR) and the dusty torus (DT). The SED also includes the thermal emission of the disk, the BLR and the torus. |
 | **Hadronic**, lepto-hadronic | Protons in the blob add the emission of their interactions, and neutrinos, to the electrons' synchrotron and SSC emission. |
 
 The hadronic model also predicts the neutrino flux, drawn as a dashed curve.
@@ -55,10 +56,13 @@ The hadronic model also predicts the neutrino flux, drawn as a dashed curve.
 - **EBL absorption**, when ticked, attenuates the γ-ray emission by the extragalactic background
   light with model C of
   [Finke, Razzaque & Dermer 2010, ApJ, 712, 238](https://ui.adsabs.harvard.edu/abs/2010ApJ...712..238F/abstract).
+  It is available up to z = 4.99: the optical depths are tabulated every 0.01 in z, and z is
+  rounded to the nearest table.
 
 ## Parameters
 
-All logarithms are base 10. Ranges are those accepted by the form (and by the fit).
+All logarithms are base 10. The ranges are those the form accepts for a run; a fit samples
+slightly different ranges (see [Fitting your SED](fitting.md#the-priors)).
 
 ### SSC
 
@@ -94,7 +98,8 @@ The SSC parameters (with slightly different ranges), plus the external photon fi
 | log ν<sub>DT</sub> | frequency of the dusty torus photons [Hz] | fixed at 13.477 (ν = 3.0 × 10¹³ Hz) |
 
 ν<sub>BLR</sub> and ν<sub>DT</sub> are fixed in the model: the values in their fields are not
-used, in a run or in a fit.
+used, in a run or in a fit (the fields must still hold a value in their range, 14.5–16 and
+12.5–14).
 
 ### Hadronic
 

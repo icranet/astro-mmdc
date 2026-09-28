@@ -30,7 +30,7 @@ The source field accepts:
 | You type | Example | What happens |
 |---|---|---|
 | A name | `Mrk 421`, `CTA102` | After three characters a list of matching sources appears; pick one. Case and spaces do not matter. |
-| RA Dec in degrees | `338.1517 11.73081` or `338.1517, 11.73081` | Plot is enabled at once, no pick needed. RA from 0 to 360, Dec from −90 to 90. |
+| RA Dec in degrees | `338.1517 11.73081` or `338.1517, 11.73081` | Plot is enabled at once, no pick needed. RA from 0 to 360 (360 excluded), Dec from −90 to 90. |
 
 A typed name alone is not enough: pick it from the list (or press ++enter++ to take the first
 match), otherwise **Plot** stays disabled.
@@ -57,7 +57,8 @@ Filter a list by name, then click a row: it fills the source field. Press **Plot
 Press **Plot**. Two cases:
 
 - **The position was searched before** (by anyone, within 2″): the stored SED is shown at once.
-- **A new position**: MMDC queries about 60 catalogues and archives live. A progress bar shows
+- **A new position**: MMDC searches about 75 catalogues and archives (most from copies kept at
+  MMDC, the rest queried live). A progress bar shows
   each stage (searching X-ray and radio catalogues, the other catalogues, light curves,
   combining the data). This can take a few minutes.
 
@@ -91,7 +92,7 @@ The card beside the plot shows:
 | RA, Dec | J2000, in degrees and sexagesimal |
 | Galactic | Galactic longitude *l* and latitude *b* |
 | Redshift | From NED, SIMBAD or other catalogues, when one is known |
-| log ν<sub>peak</sub> [Hz] | Peak frequency of the synchrotron emission, estimated from the source's WISE infrared data. "> 17.5" is a lower limit; "—" means no estimate. |
+| log ν<sub>peak</sub> [Hz] | Peak frequency of the synchrotron emission, estimated from the source's WISE/NEOWISE infrared data when they are not dominated by emission unrelated to the jet. "> 17.5" is a lower limit; "—" means no estimate. |
 
 ### SED plot options
 
