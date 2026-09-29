@@ -10,13 +10,26 @@ MMDC supports three blazar broadband emission models:
 
 ## Input Data Format
 
-All modeling endpoints expect a CSV file with three columns (case-sensitive, lowercase):
+All modeling endpoints need a CSV file with `frequency`, `flux` and `flux_err` columns (case-sensitive, lowercase):
 
 ```csv
 frequency,flux,flux_err
 1.00e+09,2.50e-14,3.00e-15
 4.85e+09,3.10e-14,2.80e-15
 ...
+```
+
+Columns may come in any order and other columns are ignored. Upper limits
+(`is_ul` true, or `flag` UL) and rows without a positive `flux_err` are dropped.
+
+An SED from `client.sed` can be fitted directly: its CSV (`freq_hz`, `nufnu`,
+`nufnu_err`, `is_ul`, …) is accepted as well. Keep one period, or the file is
+refused as too variable:
+
+```python
+sed = client.sed.get(ra=166.113808, dec=38.208833, name="Mrk 421")
+sed.between(59000, 59030).to_csv("mrk421.csv")
+result = client.modeling.batch_infer("mrk421.csv", z=0.031, ebl=True, model_type="SSC")
 ```
 
 ## Validate CSV Before Submitting
