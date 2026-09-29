@@ -19,6 +19,19 @@ frequency,flux,flux_err
 ...
 ```
 
+Columns may come in any order and other columns are ignored. Upper limits
+(`is_ul` true, or `flag` UL) and rows without a positive `flux_err` are dropped.
+
+An SED from `client.sed` can be fitted directly: its CSV (`freq_hz`, `nufnu`,
+`nufnu_err`, `is_ul`, …) is accepted as well. Keep one period, or the file is
+refused as too variable:
+
+```python
+sed = client.sed.get(ra=166.113808, dec=38.208833, name="Mrk 421")
+sed.between(59000, 59030).to_csv("mrk421.csv")
+result = client.modeling.batch_infer("mrk421.csv", z=0.031, ebl=True, model_type="SSC")
+```
+
 ## Validate CSV Before Submitting
 
 ```python
