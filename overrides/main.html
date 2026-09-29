@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{# Consent defaults must be queued before the analytics block loads gtag. #}
+{% block libs %}
+  {{ super() }}
+  <script src="{{ 'js/ga-consent.js' | url }}"></script>
+{% endblock %}
+
 {% block announce %}
   <a href="https://mmdc.am">MMDC runs at <strong>mmdc.am</strong>: SEDs of any sky position and blazar emission modeling in your browser →</a>
 {% endblock %}
