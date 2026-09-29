@@ -38,14 +38,18 @@ frequency,flux,flux_err
 2.4200e+23,2.0400e-11,3.9000e-12
 ```
 
-Exactly these three columns, in this order, with these names in lowercase; the file name must
-end in `.csv`. Once
+The names are lowercase; other columns are ignored and the order does not matter. The file
+name must end in `.csv`.
+
+The CSV downloaded from the source card on [SED data](sed-data.md#4-download-the-data)
+(`freq_hz`, `nufnu`, `nufnu_err`, …) can be uploaded as it is. Narrow its time window first:
+a whole light curve is usually refused as too variable (see below). Once
 uploaded, the data appear on the plot and the Data card shows the number of points and the
 frequency range.
 
 Before a fit starts, the file is checked:
 
-- Rows with an empty or zero `flux_err` are dropped.
+- Upper limits (`is_ul` true, or `flag` UL) and rows without a positive `flux_err` are dropped.
 - **Only the data above 10¹¹ Hz are fitted**: fitting lower frequencies makes the model
   converge very slowly. The points below are still drawn.
 - The SED should be from one period (quasi-simultaneous data). Between 10¹¹ and 10²⁸ Hz the
