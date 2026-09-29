@@ -10,7 +10,7 @@ MMDC supports three blazar broadband emission models:
 
 ## Input Data Format
 
-All modeling endpoints expect a CSV file with three columns (case-sensitive, lowercase):
+All modeling endpoints need a CSV file with `frequency`, `flux` and `flux_err` columns (case-sensitive, lowercase):
 
 ```csv
 frequency,flux,flux_err
