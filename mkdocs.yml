@@ -49,6 +49,9 @@ plugins:
   - search
 
 extra:
+  analytics:
+    provider: google
+    property: G-36HEV1M716
   social:
     - icon: material/web
       link: https://mmdc.am
