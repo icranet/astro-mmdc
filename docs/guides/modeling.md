@@ -2,11 +2,14 @@
 
 MMDC supports three blazar broadband emission models:
 
-| Model | Description |
-|---|---|
-| `SSC` | Synchrotron Self-Compton |
-| `EIC` | External Inverse Compton |
-| `HADRONIC` | Hadronic emission model |
+| Model | Description | Typical fit time |
+|---|---|---|
+| `SSC` | Synchrotron Self-Compton | 10–15 s |
+| `EIC` | External Inverse Compton | about 1 min |
+| `HADRONIC` | Hadronic emission model | about 2 min |
+
+Fit times are the run on the server, without any wait in the queue. `batch_infer` and
+`wait_for_batch` return about a second after the fit ends.
 
 ## Input Data Format
 
