@@ -17,8 +17,8 @@ distribution of every parameter; the result is sent to you by email.
 1. **Upload SED (CSV)** in the Data card and set the **Redshift z** (and **EBL absorption**).
 2. Choose the model: **SSC**, **EIC** or **Hadronic**.
 3. Press **Fit (email)…**, check the summary, fix any parameter you know, enter your email.
-4. Press **Submit fit**. A fit runs for at most 15 minutes, plus any wait in the queue; the
-   email links to the result.
+4. Press **Submit fit**. A fit usually takes 10–15 seconds (SSC), about a minute (EIC) or
+   about 2 minutes (hadronic), plus any wait in the queue; the email links to the result.
 
 ## The data file
 
