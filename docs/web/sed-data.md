@@ -14,7 +14,7 @@ epoch of every point, and lets you explore it, filter it in time and download it
 [![The Data access section with the SED of 3C 279](img/sed-overview.webp#only-light)](img/sed-overview.webp)
 [![The Data access section with the SED of 3C 279](img/sed-overview-dark.webp#only-dark)](img/sed-overview-dark.webp)
 
-*The SED of 3C 279. Left: the SED and its tabs. Right: the source card and the SED plot options.*
+*The SED of 3C 279. Left: the SED and its tabs, with the date strip under the plot. Right: the source card and the SED plot options.*
 
 ## In short
 
@@ -100,31 +100,60 @@ The panel under the card has three sections; one is open at a time.
 
 <div class="grid" markdown>
 
+[![Energy band](img/sed-bands.webp#only-light)](img/sed-bands.webp)
+[![Energy band](img/sed-bands-dark.webp#only-dark)](img/sed-bands-dark.webp)
+
 [![Time filtering](img/sed-time.webp#only-light)](img/sed-time.webp)
 [![Time filtering](img/sed-time-dark.webp#only-dark)](img/sed-time-dark.webp)
 
 [![Plot options](img/sed-options.webp#only-light)](img/sed-options.webp)
 [![Plot options](img/sed-options-dark.webp#only-dark)](img/sed-options-dark.webp)
 
-[![Energy band](img/sed-bands.webp#only-light)](img/sed-bands.webp)
-[![Energy band](img/sed-bands-dark.webp#only-dark)](img/sed-bands-dark.webp)
-
 </div>
 
-**Time filtering** keeps only the points observed in a time window: **All time**, **One day**
-or a **Range**. Points without an observation epoch (catalogue averages) are hidden while a
-window is set, unless **Show undated catalogue values** is ticked.
+**Energy band** lists the bands (radio to gamma rays) and, inside each, the catalogues that
+returned data. Untick a band or a catalogue to hide its points.
 
-**Plot options** change the units:
+**Time filtering** keeps only the points observed in a time window. Dates are UTC days, with
+the MJD shown under each field.
+
+- **One day**: a date, with ‹ › to jump to the previous or next day with data, and
+  **± days** (0, 1, 3 or 15) to widen it.
+- **Range**: **From** and **To**, both days included.
+
+With neither picked, all points are shown; **From** and **To** then show the source's first and
+last dated days, and editing one starts a range. **Clear** returns to all time. The panel
+counts the points in the window ("8 of 24,580 points").
+
+**Undated** (with its count) is for catalogue values without an observation date. They are
+shown in all time, and hidden while a window is set unless the box is ticked.
+
+**Plot options** change the units, with a dropdown for each axis:
 
 - X axis: frequency in Hz, or energy in eV.
 - Y axis: νF(ν) in erg cm⁻² s⁻¹, TeV cm⁻² s⁻¹, Jy × Hz or W/m², dN/dE in eV⁻¹ cm⁻² s⁻¹,
   or F(ν) in Jy.
 
-**Energy band** lists the bands (radio to gamma rays) and, inside each, the catalogues that
-returned data. Untick a band or a catalogue to hide its points.
-
 The options apply to the SED tab.
+
+### The date strip
+
+Under the plot, a strip shows how many points the SED has per date. Click a bar to show its
+busiest day, or drag across the strip to pick a range. The window is shaded on the strip.
+
+### Share a link
+
+The share button in the source card copies a link to the source (on a phone it opens the
+share sheet), e.g. <https://mmdc.am/sed/mrk-421/>. The link, like the address bar, keeps the
+time filter in `t`:
+
+| `t` | Window |
+|---|---|
+| `?t=53931` | One day, MJD 53931 |
+| `?t=53931~3` | MJD 53931 ± 3 days |
+| `?t=53900-53960` | From MJD 53900 up to, not including, 53960 |
+
+For example, <https://mmdc.am/sed/mrk-421/?t=50924> opens the SED of Mrk 421 on MJD 50924.
 
 ## 4. Download the data
 
