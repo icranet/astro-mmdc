@@ -111,9 +111,9 @@ The panel under the card has three sections; one is open at a time.
 
 </div>
 
-**Time filtering** keeps only the points observed in a time window. Choose **MJD** (a slider
-from MJD 51000 to 61500) or **Date** (two calendar dates), then press **Filter**. Points without
-an observation epoch are left out while a window is set.
+**Time filtering** keeps only the points observed in a time window: **All time**, **One day**
+or a **Range**. Points without an observation epoch (catalogue averages) are hidden while a
+window is set, unless **Show undated catalogue values** is ticked.
 
 **Plot options** change the units:
 
@@ -138,8 +138,8 @@ whatever the axes on screen.
 | `nufnu` | νF(ν) [erg cm⁻² s⁻¹] |
 | `nufnu_err` | Error on νF(ν) [erg cm⁻² s⁻¹] |
 | `is_ul` | `true` if the point is an upper limit |
-| `mjd_start` | Start of the observation [MJD]; empty when unknown |
-| `mjd_end` | End of the observation [MJD]; empty when unknown |
+| `mjd_start` | Start of the observation [MJD]; 50000 for a point without an epoch (catalogue average) |
+| `mjd_end` | End of the observation [MJD]; 50000 for a point without an epoch (catalogue average) |
 | `catalog` | Catalogue the point comes from |
 | `band` | Energy band |
 | `reference` | Bibliographic reference of the catalogue |
