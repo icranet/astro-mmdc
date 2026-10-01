@@ -44,10 +44,11 @@ if result.pdf_link:
 else:
     print("Still processing...")
 
-# Or block until complete with custom polling settings
+# Or block until complete. The server holds each request until the fit
+# finishes (up to 25 s), so this returns about a second after the fit ends.
 result = client.modeling.wait_for_batch(
     submission.batch_result_id,
-    poll_interval=10.0,
+    poll_interval=5.0,   # Fallback when the server cannot hold the request
     max_minutes=15.0,
 )
 ```
