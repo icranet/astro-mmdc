@@ -233,6 +233,11 @@ class SED(BaseModel):
         return [names[i] for i in self.catalog_idx]
 
     @property
+    def is_undated(self) -> list[bool]:
+        """The :attr:`undated` column: True for every undated catalogue value."""
+        return self.undated
+
+    @property
     def missed_catalogs(self) -> list[str] | None:
         """Catalogues that could not be queried in this run (a refresh may help)."""
         return self.job.missed_catalogs if self.job else None
