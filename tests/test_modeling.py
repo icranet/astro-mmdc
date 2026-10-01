@@ -6,7 +6,7 @@ import httpx
 import pytest
 
 from astro_mmdc import MMDC
-from astro_mmdc.exceptions import APIError, BatchJobError, ValidationError
+from astro_mmdc.exceptions import APIError, BatchJobError, PollingTimeoutError, ValidationError
 from astro_mmdc.models.modeling import BatchResult, BatchSubmission, CSVValidation, InferenceResult
 
 
@@ -103,55 +103,74 @@ def test_submit_batch_retry_reuses_idempotency_key_and_content(mock_api, client)
     assert csv_body in second.read()
 
 
-def test_wait_for_batch_minimal_then_full_payload(mock_api, client):
+_DONE = {
+    "status": "done",
+    "model_type": "SSC",
+    "pdf_link": "https://mmdc.am/media/results/plot.pdf",
+}
+_HELD = {"Preference-Applied": "wait=25", "Retry-After": "1"}
+
+
+def test_wait_for_batch_holds_each_request_on_the_server(mock_api, client):
     responses = [
-        httpx.Response(200, json=_minimal_poll_payload(queue_position=1)),
-        httpx.Response(200, json=_minimal_poll_payload(status="processing")),
-        httpx.Response(
-            200,
-            json={
-                "status": "done",
-                "data": {"best": {"nu": [1e10], "nuFnu": [1e-12]}},
-                "equal_weighted_posterior": None,
-                "best_parameters": None,
-                "fixed_parameters": None,
-                "model_type": "SSC",
-                "z": 0.158,
-                "multinest_stats": None,
-                "pdf_link": "https://mmdc.am/media/results/plot.pdf",
-                "csv_best_parameters_link": None,
-                "csv_best_model_link": None,
-                "uploaded_file": None,
-            },
-        ),
+        httpx.Response(200, json=_minimal_poll_payload(queue_position=5), headers=_HELD),
+        httpx.Response(200, json=_minimal_poll_payload(status="processing"), headers=_HELD),
+        httpx.Response(200, json=_DONE),
     ]
-    mock_api.get("/api/modeling/batch_result/batch-uuid-5/").mock(side_effect=responses)
+    route = mock_api.get("/api/modeling/batch_result/batch-uuid-5/").mock(side_effect=responses)
     sleeps = []
-    with patch("astro_mmdc._polling.time.sleep", side_effect=sleeps.append):
+    with patch("astro_mmdc.resources.modeling.time.sleep", side_effect=sleeps.append):
         result = client.modeling.wait_for_batch("batch-uuid-5")
     assert isinstance(result, BatchResult)
     assert result.pdf_link is not None
-    assert sleeps == [5.0, 7.5]  # exponential backoff, x1.5
+    assert sleeps == []  # the server waited, so each answer is followed by the next request at once
+    for call in route.calls:
+        assert call.request.headers["prefer"] == "wait=25"
+        assert call.request.extensions["timeout"]["read"] == 30.0 + 25
 
 
-def test_poll_backoff_jumps_when_deep_in_queue(mock_api, client):
+def test_wait_for_batch_polls_when_the_server_did_not_wait(mock_api, client):
     responses = [
-        httpx.Response(200, json=_minimal_poll_payload(queue_position=5)),
-        httpx.Response(200, json=_minimal_poll_payload(queue_position=4)),
-        httpx.Response(
-            200,
-            json={
-                "status": "done",
-                "model_type": "SSC",
-                "pdf_link": "https://mmdc.am/media/results/plot.pdf",
-            },
-        ),
+        httpx.Response(200, json=_minimal_poll_payload(), headers={"Retry-After": "2"}),
+        httpx.Response(200, json=_minimal_poll_payload(queue_position=4)),  # older server
+        httpx.Response(200, json=_DONE),
     ]
     mock_api.get("/api/modeling/batch_result/batch-uuid-6/").mock(side_effect=responses)
     sleeps = []
-    with patch("astro_mmdc._polling.time.sleep", side_effect=sleeps.append):
+    with patch("astro_mmdc.resources.modeling.time.sleep", side_effect=sleeps.append):
         client.modeling.wait_for_batch("batch-uuid-6")
-    assert sleeps == [30.0, 30.0]  # queue_position > 1 goes straight to max_interval
+    assert sleeps == [2.0, 5.0]  # Retry-After, else poll_interval; no backoff, no 30 s jump
+
+
+def test_wait_for_batch_retry_after_never_exceeds_poll_interval(mock_api, client):
+    responses = [
+        httpx.Response(200, json=_minimal_poll_payload(), headers={"Retry-After": "60"}),
+        httpx.Response(200, json=_DONE),
+    ]
+    mock_api.get("/api/modeling/batch_result/batch-uuid-7/").mock(side_effect=responses)
+    sleeps = []
+    with patch("astro_mmdc.resources.modeling.time.sleep", side_effect=sleeps.append):
+        client.modeling.wait_for_batch("batch-uuid-7", poll_interval=3.0)
+    assert sleeps == [3.0]
+
+
+def test_wait_for_batch_done_without_pdf_returns(mock_api, client):
+    mock_api.get("/api/modeling/batch_result/batch-uuid-8/").mock(
+        return_value=httpx.Response(200, json={**_DONE, "pdf_link": None})
+    )
+    result = client.modeling.wait_for_batch("batch-uuid-8")
+    assert result.status == "done"
+    assert result.pdf_link is None
+
+
+def test_wait_for_batch_never_asks_past_the_deadline(mock_api, client):
+    route = mock_api.get("/api/modeling/batch_result/batch-uuid-9/").mock(
+        return_value=httpx.Response(200, json=_minimal_poll_payload())
+    )
+    with pytest.raises(PollingTimeoutError):
+        client.modeling.wait_for_batch("batch-uuid-9", max_minutes=0)
+    assert route.call_count == 1
+    assert "prefer" not in route.calls[0].request.headers
 
 
 def test_get_batch_result(mock_api, client):
