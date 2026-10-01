@@ -131,7 +131,7 @@ def test_wait_for_batch_holds_each_request_on_the_server(mock_api, client):
 
 def test_wait_for_batch_polls_when_the_server_did_not_wait(mock_api, client):
     responses = [
-        httpx.Response(200, json=_minimal_poll_payload(), headers={"Retry-After": "2"}),
+        httpx.Response(200, json=_minimal_poll_payload(), headers=[("Retry-After", "2"), ("Retry-After", "5")]),
         httpx.Response(200, json=_minimal_poll_payload(queue_position=4)),  # older server
         httpx.Response(200, json=_DONE),
     ]
@@ -139,7 +139,7 @@ def test_wait_for_batch_polls_when_the_server_did_not_wait(mock_api, client):
     sleeps = []
     with patch("astro_mmdc.resources.modeling.time.sleep", side_effect=sleeps.append):
         client.modeling.wait_for_batch("batch-uuid-6")
-    assert sleeps == [2.0, 5.0]  # Retry-After, else poll_interval; no backoff, no 30 s jump
+    assert sleeps == [2.0, 5.0]  # the server's Retry-After (nginx appends its own), else poll_interval
 
 
 def test_wait_for_batch_retry_after_never_exceeds_poll_interval(mock_api, client):
