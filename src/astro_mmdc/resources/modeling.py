@@ -175,7 +175,9 @@ class ModelingResource:
         deadline = time.monotonic() + max_minutes * 60
         while True:
             wait = int(max(0, min(_SERVER_WAIT_SECONDS, deadline - time.monotonic())))
-            response = self._client.request("GET", path, **self._wait_kwargs(wait))
+            response = self._client.request(
+                "GET", path, deadline=deadline, **self._wait_kwargs(wait)
+            )
             data = response.json()
             status = data.get("status")
             if status in _TERMINAL_FAILURE_STATUSES:

@@ -173,6 +173,16 @@ def test_wait_for_batch_never_asks_past_the_deadline(mock_api, client):
     assert "prefer" not in route.calls[0].request.headers
 
 
+def test_wait_for_batch_retries_stop_at_the_deadline(mock_api, client):
+    route = mock_api.get("/api/modeling/batch_result/batch-uuid-10/").mock(
+        return_value=httpx.Response(504)
+    )
+    with patch("astro_mmdc._base.time.sleep") as sleep, pytest.raises(APIError):
+        client.modeling.wait_for_batch("batch-uuid-10", max_minutes=0.001)
+    assert route.call_count == 1  # a retry would sleep past the deadline
+    sleep.assert_not_called()
+
+
 def test_get_batch_result(mock_api, client):
     mock_api.get("/api/modeling/batch_result/batch-uuid-1/").mock(
         return_value=httpx.Response(
