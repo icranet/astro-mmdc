@@ -409,10 +409,10 @@ def test_between_uses_overlap_and_drops_undated_with_a_window(make):
 
 
 def test_undated_fallback_needs_both_ends():
-    obj = {**SED_OBJ, "mjd_start": [55000.0, 50000.0, 56850.9], "mjd_end": [55000.0, 50001.0, 56850.9]}
+    obj = {**SED_OBJ, "mjd_start": [None, 50000.0, 50000.0], "mjd_end": [None, 50001.0, 50000.0]}
     sed = SED.from_api(envelope("done", sed=obj))
-    assert sed.undated == [True, False, False]
-    assert sed.to_pandas()["undated"].tolist() == [True, False, False]
+    assert sed.undated == [True, False, True]
+    assert sed.to_pandas()["undated"].tolist() == [True, False, True]
 
 
 def test_window_sends_undated_false_unless_given(mock_api, client):

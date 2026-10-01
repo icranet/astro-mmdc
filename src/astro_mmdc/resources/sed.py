@@ -753,7 +753,11 @@ class SEDResource:
         x_axis: str | None = None,
         y_axis: str | None = None,
     ) -> Path:
-        """Download SED data as a CSV file."""
+        """Download SED data as a CSV file.
+
+        A window covering MJD 55000 also returns undated rows (printed as MJD 50000);
+        :meth:`csv` is the one that leaves them out.
+        """
         params: dict = {}
         if mjd_start is not None:
             params["mjd_start"] = mjd_start
