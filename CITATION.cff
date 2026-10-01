@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite the MMDC paper listed under preferred-citation."
 type: software
 title: "astro-mmdc"
-version: "0.2.10"
+version: "0.2.11"
 license: BSD-3-Clause
 doi: "10.5281/zenodo.22999175"
 identifiers:
@@ -10,8 +10,8 @@ identifiers:
     value: "10.5281/zenodo.22999175"
     description: "Zenodo archive, all versions"
   - type: doi
-    value: "10.5281/zenodo.23079793"
-    description: "Zenodo archive, version 0.2.10"
+    value: "10.5281/zenodo.23081859"
+    description: "Zenodo archive, version 0.2.11"
 repository-code: "https://github.com/icranet/astro-mmdc"
 url: "https://mmdc.am"
 abstract: "Python SDK for the Markarian Multiwavelength Data Center (MMDC, https://mmdc.am): retrieval of multiwavelength spectral energy distributions and light curves of blazars and other sources, on-demand Swift UVOT/XRT analysis, and broadband emission modeling of blazars with SSC, EIC and hadronic models."
