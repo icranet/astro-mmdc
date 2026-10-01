@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import json
+import time
 import uuid
 from pathlib import Path
 from typing import IO, Any
 
-from astro_mmdc._base import BaseClient
-from astro_mmdc._polling import poll_until
-from astro_mmdc.exceptions import BatchJobError
+import httpx
+
+from astro_mmdc._base import BaseClient, _parse_retry_after
+from astro_mmdc.exceptions import BatchJobError, PollingTimeoutError
 from astro_mmdc.models.modeling import (
     BatchResult,
     BatchSubmission,
@@ -16,6 +18,8 @@ from astro_mmdc.models.modeling import (
 )
 
 _TERMINAL_FAILURE_STATUSES = frozenset({"error", "cancelled", "failed"})
+# Longest the server holds a batch_result GET open (Prefer: wait).
+_SERVER_WAIT_SECONDS = 25
 
 
 def _open_file(file: str | Path | IO[bytes]) -> tuple[Any, bool]:
@@ -156,26 +160,52 @@ class ModelingResource:
         poll_interval: float = 5.0,
         max_minutes: float = 8.0,
     ) -> BatchResult:
-        """Poll until the batch job completes (pdf_link becomes non-null).
+        """Wait until the batch job completes and return its result.
 
-        Raises :class:`BatchJobError` immediately if the server reports a terminal
-        failure status (``error``, ``cancelled``, ``failed``) — no need to wait
-        for the polling deadline.
+        Each request asks the server to hold it until the job finishes, up to
+        25 s (``Prefer: wait``), so the result arrives about a second after the
+        fit ends. A server that did not wait is asked again after its
+        ``Retry-After``, at most ``poll_interval`` seconds later.
+
+        Raises :class:`BatchJobError` as soon as the server reports a terminal
+        failure status (``error``, ``cancelled``, ``failed``), and
+        :class:`PollingTimeoutError` after ``max_minutes``.
         """
-        def _check(d: dict) -> bool:
-            status = d.get("status")
+        path = f"/api/modeling/batch_result/{batch_result_id}/"
+        deadline = time.monotonic() + max_minutes * 60
+        while True:
+            wait = int(max(0, min(_SERVER_WAIT_SECONDS, deadline - time.monotonic())))
+            response = self._client.request(
+                "GET", path, deadline=deadline, **self._wait_kwargs(wait)
+            )
+            data = response.json()
+            status = data.get("status")
             if status in _TERMINAL_FAILURE_STATUSES:
                 raise BatchJobError(batch_result_id, status)
-            return d.get("pdf_link") is not None
+            if status == "done" or data.get("pdf_link") is not None:
+                return BatchResult.model_validate(data)
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise PollingTimeoutError(
+                    f"Polling {path} timed out after {max_minutes} minutes"
+                )
+            if wait and "preference-applied" in response.headers:
+                continue
+            retry_after = _parse_retry_after(response)
+            delay = min(poll_interval, retry_after) if retry_after else poll_interval
+            time.sleep(min(delay, remaining))
 
-        data = poll_until(
-            self._client,
-            f"/api/modeling/batch_result/{batch_result_id}/",
-            check=_check,
-            interval=poll_interval,
-            max_minutes=max_minutes,
-        )
-        return BatchResult.model_validate(data)
+    def _wait_kwargs(self, wait: int) -> dict[str, Any]:
+        """Prefer: wait=N, with the read timeout stretched by N so the held request is not cut."""
+        if not wait:
+            return {}
+        kwargs: dict[str, Any] = {"headers": {"Prefer": f"wait={wait}"}}
+        base = self._client._client.timeout
+        if base.read is not None:
+            kwargs["timeout"] = httpx.Timeout(
+                connect=base.connect, read=base.read + wait, write=base.write, pool=base.pool
+            )
+        return kwargs
 
     def batch_infer(
         self,
