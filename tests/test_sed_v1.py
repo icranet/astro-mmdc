@@ -385,14 +385,45 @@ def test_to_csv_matches_server_csv(tmp_path):
     assert list(csv.reader(io.StringIO(p.read_text())))[1][6] == "NVSS"
 
 
-def test_between_uses_overlap_and_keeps_undated():
-    sed = make_sed()
+def make_sed_50000(column=True):
+    obj = {**SED_OBJ, "mjd_start": [50000.0, 56669.2, 56850.9], "mjd_end": [50000.0, 56669.2, 56850.9]}
+    if column:
+        obj["undated"] = [True, False, False]
+    return SED.from_api(envelope("done", sed=obj))
+
+
+@pytest.mark.parametrize("make", [make_sed, make_sed_50000, lambda: make_sed_50000(False)])
+def test_between_uses_overlap_and_drops_undated_with_a_window(make):
+    sed = make()  # undated column, or derived from None / 50000 MJDs (older servers)
+    assert sed.undated == [True, False, False]
     b = sed.between(56600, 56700)
-    assert b.freq_hz == [1.4e9, 6.52e13] and [c.name for c in b.catalogs] == ["NVSS", "NEOWISE"]
-    assert b.between(56600, 56700, undated=False).catalog == ["NEOWISE"]
-    only = sed.between(56800, None, undated=False)
+    assert b.freq_hz == [6.52e13] and [c.name for c in b.catalogs] == ["NEOWISE"]
+    assert b.undated == [False] and b.filters["undated"] is False
+    assert sed.between(49000, 56700).catalog == ["NEOWISE"]  # covering 50000 is not enough
+    assert sed.between().catalog == ["NVSS", "NEOWISE", "NEOWISE"]
+    assert sed.between(undated=False).catalog == ["NEOWISE", "NEOWISE"]
+    assert sed.between(56600, 56700, undated=True).catalog == ["NVSS", "NEOWISE"]
+    only = sed.between(56800, None)
     assert only.nufnu == [2.9e-11] and only.catalog_idx == [0] and only.is_ul == [True]
     assert sed.points == 3  # the original is untouched
+
+
+def test_undated_fallback_needs_both_ends():
+    obj = {**SED_OBJ, "mjd_start": [55000.0, 50000.0, 56850.9], "mjd_end": [55000.0, 50001.0, 56850.9]}
+    sed = SED.from_api(envelope("done", sed=obj))
+    assert sed.undated == [True, False, False]
+    assert sed.to_pandas()["undated"].tolist() == [True, False, False]
+
+
+def test_window_sends_undated_false_unless_given(mock_api, client):
+    route = mock_api.get(f"/api/sed/{JID}/").mock(return_value=httpx.Response(200, text=SERVER_CSV))
+    client.sed.csv(JID, mjd_start=58020, mjd_end=58022)
+    q = route.calls.last.request.url.params
+    assert q["mjd_start"] == "58020" and q["mjd_end"] == "58022" and q["undated"] == "false"
+    client.sed.csv(JID, mjd_start=58020, undated=True)
+    assert route.calls.last.request.url.params["undated"] == "true"
+    client.sed.csv(JID)
+    assert "undated" not in route.calls.last.request.url.params
 
 
 def test_select_and_exclude():
@@ -405,7 +436,7 @@ def test_table_and_rows():
     sed = make_sed()
     df = sed.table
     assert list(df.columns) == ["freq_hz", "nufnu", "nufnu_err", "is_ul", "mjd_start",
-                                "mjd_end", "catalog", "band", "reference"]
+                                "mjd_end", "catalog", "band", "reference", "undated"]
     assert len(df) == 3 and df["catalog"].tolist() == ["NVSS", "NEOWISE", "NEOWISE"]
     conv = sed.to_pandas(x="eV", y="Jy")
     assert conv["x"][0] == pytest.approx(1.4e9 * units.PLANCK_CONST_EV)

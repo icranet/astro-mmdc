@@ -18,6 +18,7 @@ sed.missed_catalogs        # catalogues that could not be queried in this run, e
 
 # Points as columns (plain lists, None where missing)
 sed.freq_hz, sed.nufnu, sed.nufnu_err, sed.is_ul, sed.mjd_start, sed.mjd_end
+sed.undated                # True for undated catalogue values (mjd_start = mjd_end = 50000)
 sed.catalog                # catalogue name of every point
 sed.rows()                 # one dict per point
 sed.table                  # pandas DataFrame (needs pandas)
@@ -26,7 +27,7 @@ sed.table                  # pandas DataFrame (needs pandas)
 Filter, convert, save and plot on the client:
 
 ```python
-recent = sed.between(58000, 58400)            # MJD overlap; undated points kept unless undated=False
+recent = sed.between(58000, 58400)            # MJD overlap; undated points dropped unless undated=True
 radio = sed.select(["NVSS", "FIRST"])         # or sed.select(exclude=["ZTF"])
 sed.to_csv("mrk421.csv")                      # same columns as the server's CSV; returns the text
 sed.converted(x="eV", y="Jy")                 # {"x": [...], "y": [...], "y_err": [...]}
@@ -38,6 +39,13 @@ Units are the website's: `x` is `Hz` or `eV`; `y` is `erg cm-2 s-1` (default),
 The website's axis keys (`freq_ev`, `flux_jyhz`, `nufnu_fnu_jy`, ...) work too.
 The MJD and catalogue filters can also be applied by the server:
 `client.sed.get(..., mjd_start=58000, mjd_end=58400, catalogs=["NVSS"])`.
+
+**Undated points.** Catalogue values without an observation epoch have
+`mjd_start` = `mjd_end` = 50000 (never `None`/NaN) and `undated` True; the
+DataFrame from `sed.table` has an `undated` column too. They belong to no time
+window: when `mjd_start` or `mjd_end` is given they are dropped, otherwise kept.
+Pass `undated=True` to keep them with a window, or `undated=False` to drop them
+without one; `between()`, `get()`, `fetch()` and `csv()` all take it.
 
 **Progress.** `progress` is called with the job after every answer from the
 server; `progress=True` prints the job's log to stderr:

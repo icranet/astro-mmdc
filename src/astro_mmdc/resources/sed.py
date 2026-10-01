@@ -313,6 +313,8 @@ def _filter_params(
         params["mjd_end"] = mjd_end
     if catalogs is not None:
         params["catalogs"] = ",".join(catalogs)
+    if undated is None and (mjd_start is not None or mjd_end is not None):
+        undated = False  # the server's default for a window; older servers kept them
     if undated is not None:
         params["undated"] = "true" if undated else "false"
     return params
@@ -346,7 +348,9 @@ class SEDResource:
         ``refresh=True`` starts a new run even when a result exists; if that
         run fails, the previous SED comes back with ``stale=True`` and a
         :class:`SEDStaleWarning`. The MJD/catalogue filters are applied by
-        the server. ``ra``/``dec`` are degrees (floats, astropy Angles), or
+        the server. Undated points (MJD 50000, ``undated`` column True) are
+        dropped when a window is given and kept otherwise, unless ``undated``
+        is ``True`` (keep) or ``False`` (drop). ``ra``/``dec`` are degrees (floats, astropy Angles), or
         pass an astropy ``SkyCoord`` as ``ra``.
 
         Raises :class:`SEDNoData`, :class:`SEDJobFailed` or
@@ -528,6 +532,7 @@ class SEDResource:
         """The SED of job ``id``, waiting for the job if it is still running.
 
         A job replaced by a refresh answers with the current SED (new ``id``).
+        The filters work as in :meth:`get`.
         """
         query = _filter_params(mjd_start, mjd_end, catalogs, undated)
         _, data = self._call("GET", f"/api/sed/{id}/", params=query)
@@ -544,6 +549,10 @@ class SEDResource:
         undated: bool | None = None,
     ) -> str:
         """The server's CSV of a finished SED; also written to ``dest`` if given.
+
+        The filters work as in :meth:`get`: undated points (MJD 50000) are
+        dropped when a window is given and kept otherwise, unless ``undated``
+        is ``True`` (keep) or ``False`` (drop).
 
         Raises :class:`SEDNotReady` while the job runs and :class:`SEDJobFailed`
         for a failed job.

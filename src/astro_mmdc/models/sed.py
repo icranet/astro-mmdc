@@ -5,7 +5,7 @@ import io
 from pathlib import Path
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from astro_mmdc import units as _units
 
@@ -150,7 +150,12 @@ class SEDCatalog(BaseModel):
     color: str | None = None
 
 
-_COLUMNS = ("freq_hz", "nufnu", "nufnu_err", "is_ul", "mjd_start", "mjd_end", "catalog_idx")
+UNDATED_MJD = 50000.0
+"""``mjd_start`` = ``mjd_end`` of an undated catalogue value."""
+
+_COLUMNS = (
+    "freq_hz", "nufnu", "nufnu_err", "is_ul", "mjd_start", "mjd_end", "undated", "catalog_idx",
+)
 CSV_HEADER = (
     "freq_hz", "nufnu", "nufnu_err", "is_ul", "mjd_start", "mjd_end",
     "catalog", "band", "reference",
@@ -162,8 +167,9 @@ class SED(BaseModel):
 
     Columns are plain lists (one entry per point, ``None`` where missing):
     ``freq_hz`` (Hz), ``nufnu`` (erg cm⁻² s⁻¹; the limit for an upper limit),
-    ``nufnu_err``, ``is_ul``, ``mjd_start``/``mjd_end`` (both ``None`` for an
-    undated catalogue value) and ``catalog_idx`` into :attr:`catalogs`.
+    ``nufnu_err``, ``is_ul``, ``mjd_start``/``mjd_end`` (both 50000 for an
+    undated catalogue value), ``undated`` (True for those) and ``catalog_idx``
+    into :attr:`catalogs`.
     """
 
     id: str
@@ -185,8 +191,16 @@ class SED(BaseModel):
     is_ul: list[bool] = Field(default_factory=list)
     mjd_start: list[Optional[float]] = Field(default_factory=list)
     mjd_end: list[Optional[float]] = Field(default_factory=list)
+    undated: list[bool] = Field(default_factory=list)
     catalog_idx: list[int] = Field(default_factory=list)
     links: dict[str, str] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _fill_undated(self) -> SED:
+        # Older servers send no undated column: derive it from the MJDs.
+        if len(self.undated) != len(self.mjd_start):
+            self.undated = [_undated(s, e) for s, e in zip(self.mjd_start, self.mjd_end)]
+        return self
 
     @classmethod
     def from_api(cls, data: dict) -> SED:
@@ -259,6 +273,7 @@ class SED(BaseModel):
                 "SED.table needs pandas: pip install pandas (or astro-mmdc[plot])"
             ) from exc
         df = pd.DataFrame(self.rows(), columns=list(CSV_HEADER))
+        df["undated"] = self.undated
         if x is not None or y is not None:
             conv = self.converted(x=x or "Hz", y=y or "erg cm-2 s-1")
             df["x"], df["y"], df["y_err"] = conv["x"], conv["y"], conv["y_err"]
@@ -282,18 +297,25 @@ class SED(BaseModel):
     # -- filtering (client side, same rules as the server) -----------------
 
     def between(
-        self, mjd_start: float | None = None, mjd_end: float | None = None, *, undated: bool = True
+        self,
+        mjd_start: float | None = None,
+        mjd_end: float | None = None,
+        *,
+        undated: bool | None = None,
     ) -> SED:
         """Points whose ``[mjd_start, mjd_end]`` overlaps the window.
 
-        Either end may be ``None``. Undated points are kept unless
-        ``undated=False``, as on the server.
+        Either end may be ``None``. Undated points (MJD 50000) are not in any
+        window: as on the server, ``undated=None`` drops them when a window is
+        given and keeps them otherwise; ``True`` or ``False`` keeps or drops them.
         """
+        if undated is None:
+            undated = mjd_start is None and mjd_end is None
 
         def keep(i: int) -> bool:
-            s, e = self.mjd_start[i], self.mjd_end[i]
-            if s is None and e is None:
+            if self.undated[i]:
                 return undated
+            s, e = self.mjd_start[i], self.mjd_end[i]
             s = e if s is None else s
             e = s if e is None else e
             if mjd_start is not None and e < mjd_start:
@@ -368,6 +390,11 @@ class SED(BaseModel):
         return plot_points(
             self, path, x=x, y=y, ax=ax, title=title, legend=legend, figsize=figsize, dpi=dpi
         )
+
+
+def _undated(start: float | None, end: float | None) -> bool:
+    # 55000 is the stored sentinel older servers passed through.
+    return start == end and (start is None or start in (UNDATED_MJD, 55000.0))
 
 
 def _csv_value(value: Any) -> str:
