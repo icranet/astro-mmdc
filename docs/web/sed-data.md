@@ -115,7 +115,9 @@ The panel under the card has three sections; one is open at a time.
 returned data. Untick a band or a catalogue to hide its points.
 
 **Time filtering** keeps only the points observed in a time window. Dates are UTC days, with
-the MJD shown under each field.
+the MJD shown under each field. Click that MJD (⇄) to enter MJDs instead: every field then takes
+an MJD (`60123`, or `60123.7`, which counts as day 60123) and shows its date underneath; click
+the date to switch back. The browser remembers your choice.
 
 - **One day**: a date, with ‹ › to jump to the previous or next day with data, and
   **± days** (0, 1, 3 or 15) to widen it.
