@@ -398,8 +398,8 @@ class SED(BaseModel):
 
 
 def _undated(start: float | None, end: float | None) -> bool:
-    # 55000 is the stored sentinel older servers passed through.
-    return start == end and (start is None or start in (UNDATED_MJD, 55000.0))
+    # Fallback for responses without the column: older servers sent null, newer ones 50000.
+    return start == end and (start is None or start == UNDATED_MJD)
 
 
 def _csv_value(value: Any) -> str:
