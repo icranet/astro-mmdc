@@ -26,7 +26,7 @@ Every public method of the four resource namespaces on an `MMDC` client. The [gu
 | `validate_csv(file)` | Validate CSV before submission |
 | `submit_batch(file, z, ebl, model_type, ...)` | Submit batch inference job |
 | `get_batch_result(batch_result_id)` | Get current job result |
-| `wait_for_batch(batch_result_id, ...)` | Poll until job completes |
+| `wait_for_batch(batch_result_id, poll_interval=5, max_minutes=8)` | Wait until the job completes; the server holds each request up to 25 s, so the result arrives about a second after the fit ends |
 | `batch_infer(file, z, ebl, model_type, ...)` | Submit and wait |
 | `infer(z, ebl, model_type, parameters)` | Synchronous model inference |
 | `csv_to_json(file)` | Convert CSV to JSON format |

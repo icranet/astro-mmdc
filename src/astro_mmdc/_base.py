@@ -198,7 +198,8 @@ def _parse_retry_after(response: httpx.Response) -> float | None:
     value = response.headers.get("retry-after")
     if value is None:
         return None
+    # nginx can append its own value after the server's: "1, 5".
     try:
-        return float(value)
+        return float(value.split(",")[0])
     except (ValueError, TypeError):
         return None
