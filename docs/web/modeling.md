@@ -5,11 +5,11 @@ description: "Compute the broadband SED of a blazar on mmdc.am with the synchrot
 
 # Blazar SED modeling
 
-The **Theoretical Modeling** section of [mmdc.am](https://mmdc.am/#theoreticalModeling)
+The **Modeling** section of [mmdc.am](https://mmdc.am/#theoreticalModeling)
 computes the broadband SED of a blazar for the parameters you give, within seconds, and
 fits the models to your own data ([Fitting your SED](fitting.md)).
 
-[Open Theoretical Modeling on mmdc.am :material-open-in-new:](https://mmdc.am/#theoreticalModeling){ .md-button .md-button--primary }
+[Open Modeling on mmdc.am :material-open-in-new:](https://mmdc.am/#theoreticalModeling){ .md-button .md-button--primary }
 
 [![The modeling section with an SSC model](img/tm-ssc.webp#only-light)](img/tm-ssc.webp)
 [![The modeling section with an SSC model](img/tm-ssc-dark.webp#only-dark)](img/tm-ssc-dark.webp)

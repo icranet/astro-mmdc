@@ -10,7 +10,7 @@ On [mmdc.am](https://mmdc.am/#theoreticalModeling) you can fit the SSC, EIC or h
 [MultiNest](https://arxiv.org/abs/0809.3437) (Feroz et al. 2009), which gives the posterior
 distribution of every parameter; the result is sent to you by email.
 
-[Open Theoretical Modeling on mmdc.am :material-open-in-new:](https://mmdc.am/#theoreticalModeling){ .md-button .md-button--primary }
+[Open Modeling on mmdc.am :material-open-in-new:](https://mmdc.am/#theoreticalModeling){ .md-button .md-button--primary }
 
 ## In short
 

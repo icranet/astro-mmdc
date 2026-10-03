@@ -5,14 +5,14 @@ description: "How to build the multiwavelength spectral energy distribution (SED
 
 # Getting SED data
 
-The **Data access** section of [mmdc.am](https://mmdc.am/#services) builds the multiwavelength
+The **SED** section of [mmdc.am](https://mmdc.am/#services) builds the multiwavelength
 spectral energy distribution (SED) of any sky position from radio to gamma rays, with the
 epoch of every point, and lets you explore it, filter it in time and download it.
 
-[Open Data access on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button .md-button--primary }
+[Open SED on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button .md-button--primary }
 
-[![The Data access section with the SED of 3C 279](img/sed-overview.webp#only-light)](img/sed-overview.webp)
-[![The Data access section with the SED of 3C 279](img/sed-overview-dark.webp#only-dark)](img/sed-overview-dark.webp)
+[![The SED section with the SED of 3C 279](img/sed-overview.webp#only-light)](img/sed-overview.webp)
+[![The SED section with the SED of 3C 279](img/sed-overview-dark.webp#only-dark)](img/sed-overview-dark.webp)
 
 *The SED of 3C 279. Left: the SED and its tabs, with the date strip under the plot. Right: the source card and the SED plot options.*
 
@@ -218,4 +218,4 @@ abstract, and follow the ADS, arXiv, DOI and PDF links.
 Everything on this page is also available from Python with the `astro-mmdc` SDK:
 see [SED data](../guides/sed.md).
 
-[Open Data access on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button }
+[Open SED on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button }
