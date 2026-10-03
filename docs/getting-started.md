@@ -57,6 +57,8 @@ def handle(request):
 
 `end_user` is an opaque id of your choice: 1–64 characters from letters, digits and `. _ : -`, never an email. Anything else raises `ValueError` at construction. MMDC records it only when a valid `api_key` is sent, and uses it for per-user usage statistics.
 
+Writing a script, pipeline or AI agent? [Using MMDC from scripts and AI agents](agents.md) lists the rules such clients should follow (identification, waiting, limits) and a recipe per task.
+
 The client provides four resource namespaces:
 
 - `client.sed`: multi-wavelength SED of any sky position ([guide](guides/sed.md))

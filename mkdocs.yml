@@ -47,6 +47,49 @@ markdown_extensions:
 
 plugins:
   - search
+  - llmstxt:
+      full_output: llms-full.txt
+      markdown_description: |
+        MMDC (https://mmdc.am), the Markarian Multiwavelength Data Center, builds multiwavelength,
+        multitemporal SEDs and light curves of blazars and of any sky position from radio to gamma rays,
+        runs on-demand Swift UVOT/XRT analysis, and fits SSC, EIC and hadronic blazar emission models.
+        It is used from the website or from Python with the astro-mmdc SDK (`pip install astro-mmdc`).
+
+        Rules for programmatic clients (scripts, pipelines, AI agents):
+
+        - Positions are ICRS right ascension and declination in degrees.
+        - Resolve a name first: POST https://mmdc.am/api/autocomplete/ with {"query": "Mrk 421"}
+          answers {"results": [{"name", "ra", "dec", "refcatalog"}]}; astropy's SkyCoord.from_name also works.
+        - Identify yourself. The SDK sends User-Agent astro-mmdc/<version>; `MMDC(app="your-project")`
+          adds an X-MMDC-Client header. Raw HTTP must send X-MMDC-Client, otherwise the modeling POSTs
+          answer HTTP 426.
+        - An SED request reuses any job within 2 arcsec; do not send `refresh` routinely.
+        - Respect Retry-After, keep at most 2 jobs in flight, and wait with the header `Prefer: wait=25`
+          (the server maximum) instead of polling in a tight loop.
+        - Undated catalogue values carry MJD 50000 (`undated` true); they are not 1995 observations.
+        - Cite Sahakyan et al. 2024, AJ, 168, 289 (doi:10.3847/1538-3881/ad8231). MMDC data are
+          licensed under CC BY 4.0 and require attribution.
+
+        Recipes (Python SDK, `client = MMDC(app="your-project")`):
+
+        - SED: `client.sed.get(ra=..., dec=..., name=...)`, then `.between(mjd_start, mjd_end)` and `.to_csv(path)`
+        - Light curve: `client.observations.cone_search(ra=..., dec=..., radius_arcsec=10, is_lightcurve=True)`
+        - Model curve: `client.modeling.infer(z=..., ebl=True, model_type="SSC", parameters={...})`
+        - Fit: `client.modeling.submit_batch(csv, z=..., ebl=True, model_type="SSC")`, then `client.modeling.wait_for_batch(id)`
+        - Swift: `client.madam.analyze(ra=..., dec=..., mjd_start=..., mjd_end=..., instrument="uvot")`
+
+        The full guide for scripts and agents, with raw HTTP examples and limits, is the first page below.
+      sections:
+        Agents and scripts:
+          - agents.md
+        Python SDK:
+          - getting-started.md
+          - guides/*.md
+          - api.md
+        Website:
+          - web/*.md
+        Citing:
+          - citing.md
 
 extra:
   analytics:
@@ -74,6 +117,7 @@ nav:
       - Fitting your SED: web/fitting.md
   - Python SDK:
       - Getting started: getting-started.md
+      - Scripts and AI agents: agents.md
       - SED data: guides/sed.md
       - Observations: guides/observations.md
       - Swift UVOT/XRT analysis: guides/swift.md
