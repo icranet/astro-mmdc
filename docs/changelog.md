@@ -2,6 +2,10 @@
 
 Release notes for every version are on [GitHub Releases](https://github.com/icranet/astro-mmdc/releases).
 
+## Unreleased
+
+- Docs: new page [Using MMDC from scripts and AI agents](agents.md); the site now publishes [llms.txt](https://docs.mmdc.am/llms.txt) and a Markdown copy of each guide.
+
 ## 0.2.12
 
 - Fix: the `norm` y unit (`flux_norm`, `dN/dE`) is now dN/dE = νFν / E² in eV⁻¹ cm⁻² s⁻¹, as labelled. It used to be νFν [TeV cm⁻² s⁻¹] / E [eV], so its values change: 1e-10 erg cm⁻² s⁻¹ at 1 GeV is now 6.24e-17 (was 6.24e-20). The website's dN/dE axis is fixed the same way.

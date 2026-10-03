@@ -35,6 +35,7 @@ print(sed.source.redshift, sed.points)
 ```
 
 - [Getting started](getting-started.md): installation, creating a client, quick start.
+- [Scripts and AI agents](agents.md): rules and recipes for code that calls MMDC without a person at the browser, including raw HTTP.
 - Guides:
     - [SED data](guides/sed.md): the SED of any sky position.
     - [Observations](guides/observations.md): the unified observations catalog (SED + lightcurve).
