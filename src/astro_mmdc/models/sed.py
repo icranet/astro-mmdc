@@ -71,8 +71,10 @@ class SEDProgress(BaseModel):
     """Latest progress of a running job.
 
     ``stage``/``done``/``total`` are the headline for one progress bar
-    (phase1, phase2, lightcurves, finishing); ``stages`` has every stage
-    reported so far, since light curves run beside phase 2.
+    (catalogues, lightcurves, finishing; jobs from before the single
+    catalogue search report phase1 and phase2 in place of catalogues);
+    ``stages`` has every stage reported so far, since light curves run
+    beside the catalogue search.
     """
 
     stage: str

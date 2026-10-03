@@ -59,8 +59,7 @@ Press **Plot**. Two cases:
 - **The position was searched before** (by anyone, within 2″): the stored SED is shown at once.
 - **A new position**: MMDC searches about 75 catalogues and archives (most from copies kept at
   MMDC, the rest queried live). A progress bar shows
-  each stage (searching X-ray and radio catalogues, the other catalogues, light curves,
-  combining the data). This can take a few minutes.
+  each stage (searching the catalogues, light curves, combining the data). This can take a few minutes.
 
 To follow a run in detail, open **⋯ → Show logs**. The log lists every catalogue queried and
 the number of points it returned.

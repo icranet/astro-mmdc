@@ -91,7 +91,7 @@ remaining sources are not started.
 ```python
 job = client.sed.submit(ra, dec, name="PKS 2155-304")
 job.id, job.status          # queued | running | done | no_data | failed
-job.progress                # SEDProgress(stage="phase2", done=17, total=59, elapsed_s=8.9)
+job.progress                # SEDProgress(stage="catalogues", done=17, total=73, elapsed_s=8.9)
 job.refresh()               # one request: new status and only the new events
 job.events                  # every event so far; event.render() gives the log line
 sed = job.result(timeout=300)

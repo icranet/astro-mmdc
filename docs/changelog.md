@@ -2,8 +2,10 @@
 
 Release notes for every version are on [GitHub Releases](https://github.com/icranet/astro-mmdc/releases).
 
-## Unreleased
+## 0.2.13
 
+- SED jobs now search all catalogues in one stage: `SEDJob.progress.stage` reads `catalogues` (with `stages["catalogues"]`), and events carry `phase="catalogues"` and subject `Catalogues`. Jobs run before the change still report `phase1` and `phase2`. Nothing breaks: the stage was always a plain string.
+- The server's SEDs come from a new matching step: each catalogue's rows are kept within a radius set by its own position error, around the requested position. Points change for some sources (more X-ray and radio counterparts, fewer chance matches).
 - Docs: new page [Using MMDC from scripts and AI agents](agents.md); the site now publishes [llms.txt](https://docs.mmdc.am/llms.txt) and a Markdown copy of each guide.
 
 ## 0.2.12
