@@ -308,9 +308,10 @@ class SED(BaseModel):
         *,
         undated: bool | None = None,
     ) -> SED:
-        """Points whose ``[mjd_start, mjd_end]`` overlaps the window.
+        """Points whose midpoint ``(mjd_start + mjd_end) / 2`` is in ``[mjd_start, mjd_end)``.
 
-        Either end may be ``None``. Undated points (MJD 50000) are not in any
+        As on the server, an interval counts once, on its midpoint, so adjacent
+        bins never share a window. Either end may be ``None``. Undated points (MJD 50000) are not in any
         window: as on the server, ``undated=None`` drops them when a window is
         given and keeps them otherwise; ``True`` or ``False`` keeps or drops them.
         """
@@ -323,9 +324,10 @@ class SED(BaseModel):
             s, e = self.mjd_start[i], self.mjd_end[i]
             s = e if s is None else s
             e = s if e is None else e
-            if mjd_start is not None and e < mjd_start:
+            mid = (s + e) / 2
+            if mjd_start is not None and mid < mjd_start:
                 return False
-            if mjd_end is not None and s > mjd_end:
+            if mjd_end is not None and mid >= mjd_end:
                 return False
             return True
 

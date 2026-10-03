@@ -5,6 +5,7 @@ Release notes for every version are on [GitHub Releases](https://github.com/icra
 ## 0.2.12
 
 - Fix: the `norm` y unit (`flux_norm`, `dN/dE`) is now dN/dE = νFν / E² in eV⁻¹ cm⁻² s⁻¹, as labelled. It used to be νFν [TeV cm⁻² s⁻¹] / E [eV], so its values change: 1e-10 erg cm⁻² s⁻¹ at 1 GeV is now 6.24e-17 (was 6.24e-20). The website's dN/dE axis is fixed the same way.
+- Behaviour change: `SED.between()` keeps a point when its midpoint `(mjd_start + mjd_end) / 2` is in `[mjd_start, mjd_end)`, matching the server (previously any overlap, ends included). Adjacent bins no longer land in the same window.
 
 ## 0.2.11
 

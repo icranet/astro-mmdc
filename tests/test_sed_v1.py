@@ -393,7 +393,7 @@ def make_sed_50000(column=True):
 
 
 @pytest.mark.parametrize("make", [make_sed, make_sed_50000, lambda: make_sed_50000(False)])
-def test_between_uses_overlap_and_drops_undated_with_a_window(make):
+def test_between_drops_undated_with_a_window(make):
     sed = make()  # undated column, or derived from None / 50000 MJDs (older servers)
     assert sed.undated == sed.is_undated == [True, False, False]
     b = sed.between(56600, 56700)
@@ -406,6 +406,21 @@ def test_between_uses_overlap_and_drops_undated_with_a_window(make):
     only = sed.between(56800, None)
     assert only.nufnu == [2.9e-11] and only.catalog_idx == [0] and only.is_ul == [True]
     assert sed.points == 3  # the original is untouched
+
+
+def test_between_uses_the_midpoint_in_a_half_open_window():
+    obj = {
+        **SED_OBJ,
+        # Ends at the window start; then two bins sharing the edge 58000.5.
+        "mjd_start": [57999.0, 58000.0, 58000.5],
+        "mjd_end": [58000.0, 58000.5, 58001.5],
+        "undated": [False, False, False],
+    }
+    sed = SED.from_api(envelope("done", sed=obj))
+    assert sed.between(58000, 58001).nufnu == [3.2e-11]  # midpoints 57999.5, 58000.25, 58001.0
+    assert sed.between(58001, 58002).nufnu == [2.9e-11]
+    assert sed.between(None, 58000).nufnu == [1.1e-14]
+    assert sed.between(57999.5, None).points == 3
 
 
 def test_undated_fallback_needs_both_ends():

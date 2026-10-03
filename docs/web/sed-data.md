@@ -123,6 +123,9 @@ the date to switch back. The browser remembers your choice.
   **± days** (0, 1, 3 or 15) to widen it.
 - **Range**: **From** and **To**, both days included.
 
+A point with a time span (a binned light curve, a long exposure) counts on the day of its
+midpoint, so each one is in one day only.
+
 With neither picked, all points are shown; **From** and **To** then show the source's first and
 last dated days, and editing one starts a range. **Clear** returns to all time. The panel
 counts the points in the window ("8 of 24,580 points").
@@ -141,7 +144,8 @@ The options apply to the SED tab.
 ### The date strip
 
 Under the plot, a strip shows how many points the SED has per date. Click a bar to show its
-busiest day, or drag across the strip to pick a range. The window is shaded on the strip.
+busiest day, or drag across the strip to pick a range. The window is shaded on the strip. Points
+are counted on their midpoint's date.
 
 ### Share a link
 

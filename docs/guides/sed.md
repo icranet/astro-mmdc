@@ -27,7 +27,7 @@ sed.table                  # pandas DataFrame (needs pandas)
 Filter, convert, save and plot on the client:
 
 ```python
-recent = sed.between(58000, 58400)            # MJD overlap; undated points dropped unless undated=True
+recent = sed.between(58000, 58400)            # midpoint in [58000, 58400); undated dropped unless undated=True
 radio = sed.select(["NVSS", "FIRST"])         # or sed.select(exclude=["ZTF"])
 sed.to_csv("mrk421.csv")                      # same columns as the server's CSV; returns the text
 sed.converted(x="eV", y="Jy")                 # {"x": [...], "y": [...], "y_err": [...]}
