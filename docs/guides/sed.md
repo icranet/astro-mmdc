@@ -27,7 +27,7 @@ sed.table                  # pandas DataFrame (needs pandas)
 Filter, convert, save and plot on the client:
 
 ```python
-recent = sed.between(58000, 58400)            # MJD overlap; undated points dropped unless undated=True
+recent = sed.between(58000, 58400)            # midpoint in [58000, 58400], ends included; undated dropped unless undated=True
 radio = sed.select(["NVSS", "FIRST"])         # or sed.select(exclude=["ZTF"])
 sed.to_csv("mrk421.csv")                      # same columns as the server's CSV; returns the text
 sed.converted(x="eV", y="Jy")                 # {"x": [...], "y": [...], "y_err": [...]}
@@ -35,7 +35,7 @@ recent.plot("mrk421.png", y="Jy Hz")          # needs astro-mmdc[plot]; returns 
 ```
 
 Units are the website's: `x` is `Hz` or `eV`; `y` is `erg cm-2 s-1` (default),
-`TeV cm-2 s-1`, `norm` (the website's dN/dE axis), `Jy Hz`, `W m-2` or `Jy` (F(ν)).
+`TeV cm-2 s-1`, `norm` (dN/dE = νFν / E² in eV⁻¹ cm⁻² s⁻¹), `Jy Hz`, `W m-2` or `Jy` (F(ν)).
 The website's axis keys (`freq_ev`, `flux_jyhz`, `nufnu_fnu_jy`, ...) work too.
 The MJD and catalogue filters can also be applied by the server:
 `client.sed.get(..., mjd_start=58000, mjd_end=58400, catalogs=["NVSS"])`.
@@ -172,8 +172,8 @@ data = client.sed.get_data(
 
 | `y_axis` | Description |
 |---|---|
-| `"flux_ev"` | erg/cm²/s to eV/cm²/s |
-| `"flux_norm"` | Normalized eV/cm²/s |
+| `"flux_ev"` | νFν in TeV/cm²/s |
+| `"flux_norm"` | dN/dE = νFν / E² in eV⁻¹ cm⁻² s⁻¹ |
 | `"flux_jyhz"` | Jy·Hz |
 | `"flux_wm2"` | W/m² |
 | `"nufnu_fnu_jy"` | Fν in Jy |

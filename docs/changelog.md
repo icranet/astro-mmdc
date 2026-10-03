@@ -2,6 +2,11 @@
 
 Release notes for every version are on [GitHub Releases](https://github.com/icranet/astro-mmdc/releases).
 
+## 0.2.12
+
+- Fix: the `norm` y unit (`flux_norm`, `dN/dE`) is now dN/dE = νFν / E² in eV⁻¹ cm⁻² s⁻¹, as labelled. It used to be νFν [TeV cm⁻² s⁻¹] / E [eV], so its values change: 1e-10 erg cm⁻² s⁻¹ at 1 GeV is now 6.24e-17 (was 6.24e-20). The website's dN/dE axis is fixed the same way.
+- Behaviour change: `SED.between()` keeps a point when its midpoint `(mjd_start + mjd_end) / 2` lies in the window `[mjd_start, mjd_end]` (ends included), matching the server; previously any overlap counted, so adjacent bins landed in the same window.
+
 ## 0.2.11
 
 - `wait_for_batch()` asks the server to hold each request until the fit ends (`Prefer: wait`, up to 25 s), so it returns about a second after the fit finishes instead of up to 30 s later.

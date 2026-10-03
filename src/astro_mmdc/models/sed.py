@@ -290,7 +290,7 @@ class SED(BaseModel):
         """The points in the website's axis units: ``{"x", "y", "y_err"}`` lists.
 
         ``x``: ``Hz`` or ``eV``. ``y``: ``erg cm-2 s-1``, ``TeV cm-2 s-1``,
-        ``norm`` (the website's dN/dE), ``Jy Hz``, ``W m-2`` or ``Jy``. The
+        ``norm`` (dN/dE in eV⁻¹ cm⁻² s⁻¹), ``Jy Hz``, ``W m-2`` or ``Jy``. The
         website's axis keys (``freq_ev``, ``flux_jyhz``, ...) work too.
         """
         return {
@@ -308,9 +308,10 @@ class SED(BaseModel):
         *,
         undated: bool | None = None,
     ) -> SED:
-        """Points whose ``[mjd_start, mjd_end]`` overlaps the window.
+        """Points whose midpoint (start + end) / 2 lies in the window ``[mjd_start, mjd_end]``.
 
-        Either end may be ``None``. Undated points (MJD 50000) are not in any
+        Ends included, as on the server; an interval counts on its midpoint only.
+        Either end of the window may be ``None``. Undated points (MJD 50000) are not in any
         window: as on the server, ``undated=None`` drops them when a window is
         given and keeps them otherwise; ``True`` or ``False`` keeps or drops them.
         """
@@ -323,9 +324,10 @@ class SED(BaseModel):
             s, e = self.mjd_start[i], self.mjd_end[i]
             s = e if s is None else s
             e = s if e is None else e
-            if mjd_start is not None and e < mjd_start:
+            mid = (s + e) / 2
+            if mjd_start is not None and mid < mjd_start:
                 return False
-            if mjd_end is not None and s > mjd_end:
+            if mjd_end is not None and mid > mjd_end:
                 return False
             return True
 

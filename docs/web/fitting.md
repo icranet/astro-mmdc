@@ -10,7 +10,7 @@ On [mmdc.am](https://mmdc.am/#theoreticalModeling) you can fit the SSC, EIC or h
 [MultiNest](https://arxiv.org/abs/0809.3437) (Feroz et al. 2009), which gives the posterior
 distribution of every parameter; the result is sent to you by email.
 
-[Open Theoretical Modeling on mmdc.am :material-open-in-new:](https://mmdc.am/#theoreticalModeling){ .md-button .md-button--primary }
+[Open Modeling on mmdc.am :material-open-in-new:](https://mmdc.am/#theoreticalModeling){ .md-button .md-button--primary }
 
 ## In short
 
@@ -117,8 +117,10 @@ queue), and another when it is ready. If the fit fails, an email tells you. The 
 - the plot of your data, the **best fit** and the posterior samples;
 - the **best-fit parameters**, each with its 1σ error (or "fixed"), also loaded into the Model
   panel so you can run the model from them;
-- three downloads: **Corner plot** (the posterior distributions, PDF), **Parameters** (the
-  best-fit parameters, CSV) and **Model** (the best-fit SED, CSV).
+- three downloads: **Corner plot** (the posterior distributions, PDF: 1σ/2σ contours,
+  smoothed marginals and the best fit in red, each parameter titled with its best-fit
+  value ± 1σ), **Parameters** (the best-fit parameters, CSV) and **Model** (the best-fit
+  SED, CSV).
 
 Up to five fits from one network address can be queued or running at a time; a sixth is
 refused until one of them finishes.

@@ -5,14 +5,14 @@ description: "How to build the multiwavelength spectral energy distribution (SED
 
 # Getting SED data
 
-The **Data access** section of [mmdc.am](https://mmdc.am/#services) builds the multiwavelength
+The **SED** section of [mmdc.am](https://mmdc.am/#services) builds the multiwavelength
 spectral energy distribution (SED) of any sky position from radio to gamma rays, with the
 epoch of every point, and lets you explore it, filter it in time and download it.
 
-[Open Data access on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button .md-button--primary }
+[Open SED on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button .md-button--primary }
 
-[![The Data access section with the SED of 3C 279](img/sed-overview.webp#only-light)](img/sed-overview.webp)
-[![The Data access section with the SED of 3C 279](img/sed-overview-dark.webp#only-dark)](img/sed-overview-dark.webp)
+[![The SED section with the SED of 3C 279](img/sed-overview.webp#only-light)](img/sed-overview.webp)
+[![The SED section with the SED of 3C 279](img/sed-overview-dark.webp#only-dark)](img/sed-overview-dark.webp)
 
 *The SED of 3C 279. Left: the SED and its tabs, with the date strip under the plot. Right: the source card and the SED plot options.*
 
@@ -123,6 +123,9 @@ the date to switch back. The browser remembers your choice.
   **± days** (0, 1, 3 or 15) to widen it.
 - **Range**: **From** and **To**, both days included.
 
+A point with a time span (a binned light curve, a long exposure) counts on the day of its
+midpoint, so each one is in one day only.
+
 With neither picked, all points are shown; **From** and **To** then show the source's first and
 last dated days, and editing one starts a range. **Clear** returns to all time. The panel
 counts the points in the window ("8 of 24,580 points").
@@ -141,7 +144,8 @@ The options apply to the SED tab.
 ### The date strip
 
 Under the plot, a strip shows how many points the SED has per date. Click a bar to show its
-busiest day, or drag across the strip to pick a range. The window is shaded on the strip.
+busiest day, or drag across the strip to pick a range. The window is shaded on the strip. Points
+are counted on their midpoint's date.
 
 ### Share a link
 
@@ -214,4 +218,4 @@ abstract, and follow the ADS, arXiv, DOI and PDF links.
 Everything on this page is also available from Python with the `astro-mmdc` SDK:
 see [SED data](../guides/sed.md).
 
-[Open Data access on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button }
+[Open SED on mmdc.am :material-open-in-new:](https://mmdc.am/#services){ .md-button }
