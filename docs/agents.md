@@ -72,9 +72,9 @@ from astro_mmdc import SEDJobFailed, SEDNoData, SEDTimeoutError
 try:
     sed = client.sed.get(ra=166.113808, dec=38.208833, name="Mrk 421")
 except SEDNoData:
-    ...                       # the pipeline ran and found no points at this position
+    raise SystemExit("no points at this position")   # the pipeline ran and found nothing
 except SEDJobFailed as exc:
-    print(exc.code, exc.retry_after_s)
+    raise SystemExit(f"failed: {exc.code}, retry after {exc.retry_after_s} s")
 except SEDTimeoutError as exc:
     sed = client.sed.fetch(exc.id)   # the job keeps running on the server; pick it up later
 
@@ -155,17 +155,17 @@ fit_id = submission.batch_result_id
 try:
     result = client.modeling.wait_for_batch(fit_id, max_minutes=30)
 except PollingTimeoutError:
-    ...   # still queued or running: call wait_for_batch(fit_id) again later
+    raise SystemExit(f"still queued or running; call wait_for_batch({fit_id!r}) later")
 except BatchJobError as exc:
-    print(exc.status)
+    raise SystemExit(f"fit failed: {exc.status}")
 
-for name, p in result.best_parameters.items():
+for name, p in (result.best_parameters or {}).items():
     print(name, p.value, p.error)
 print(result.pdf_link)
 ```
 
 `batch_infer(...)` does submit and wait in one call, but waits only `max_minutes=8` by default.
-A fit runs for 10–15 s (SSC), about 1 min (EIC) or about 2 min (HADRONIC), plus any time in the
+A fit takes from about 10–20 s (SSC) to a few minutes (EIC, HADRONIC), plus any time in the
 queue, so pass a larger `max_minutes` when the queue may be busy. The SED CSV from
 `sed.to_csv()` is accepted as is; keep one time period. Results are deleted 15 days after
 submission. See [Blazar emission modeling](guides/modeling.md).
@@ -254,7 +254,7 @@ require identification, but sending `X-MMDC-Client` everywhere costs nothing.
 
 | What | Limit |
 |---|---|
-| `Prefer: wait` | at most 25 s per request; 4 waiting requests site-wide, 2 per client |
+| `Prefer: wait` | at most 25 s per request. SED: 4 waiting requests site-wide, 2 per client; fit results (`batch_result`): 3 site-wide, 2 per client |
 | Fits queued or running at once | 2 per client without an API key; 5 or 25 with one, by tier. Above it: 429, `Retry-After: 120` |
 | Synchronous inference | 4 at once site-wide; above it: 429, `Retry-After: 10` |
 | SED reuse | any job within 2″ is reused; a failed run is not retried for 30 min unless `refresh` is sent |
