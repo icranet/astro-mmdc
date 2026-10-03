@@ -308,10 +308,10 @@ class SED(BaseModel):
         *,
         undated: bool | None = None,
     ) -> SED:
-        """Points whose midpoint ``(mjd_start + mjd_end) / 2`` is in ``[mjd_start, mjd_end)``.
+        """Points whose midpoint (start + end) / 2 lies in the window ``[mjd_start, mjd_end]``.
 
-        As on the server, an interval counts once, on its midpoint, so adjacent
-        bins never share a window. Either end may be ``None``. Undated points (MJD 50000) are not in any
+        Ends included, as on the server; an interval counts on its midpoint only.
+        Either end of the window may be ``None``. Undated points (MJD 50000) are not in any
         window: as on the server, ``undated=None`` drops them when a window is
         given and keeps them otherwise; ``True`` or ``False`` keeps or drops them.
         """
@@ -327,7 +327,7 @@ class SED(BaseModel):
             mid = (s + e) / 2
             if mjd_start is not None and mid < mjd_start:
                 return False
-            if mjd_end is not None and mid >= mjd_end:
+            if mjd_end is not None and mid > mjd_end:
                 return False
             return True
 

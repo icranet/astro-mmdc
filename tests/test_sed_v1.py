@@ -408,19 +408,26 @@ def test_between_drops_undated_with_a_window(make):
     assert sed.points == 3  # the original is untouched
 
 
-def test_between_uses_the_midpoint_in_a_half_open_window():
+def test_between_uses_the_midpoint_in_a_closed_window():
     obj = {
         **SED_OBJ,
-        # Ends at the window start; then two bins sharing the edge 58000.5.
-        "mjd_start": [57999.0, 58000.0, 58000.5],
-        "mjd_end": [58000.0, 58000.5, 58001.5],
-        "undated": [False, False, False],
+        "points": 4,
+        "freq_hz": [1.4e9, 6.52e13, 6.52e13, 6.52e13],
+        "nufnu": [1.0, 2.0, 3.0, 4.0],
+        "nufnu_err": [None] * 4,
+        "is_ul": [False] * 4,
+        "catalog_idx": [0, 1, 1, 1],
+        # Midpoints 57999.5 (ends at the window start), 58000.25 and 58001.25 (bins
+        # sharing the edge 58000.5), and 58001.0 (exactly the window end).
+        "mjd_start": [57999.0, 58000.0, 58000.5, 58000.5],
+        "mjd_end": [58000.0, 58000.5, 58002.0, 58001.5],
+        "undated": [False] * 4,
     }
     sed = SED.from_api(envelope("done", sed=obj))
-    assert sed.between(58000, 58001).nufnu == [3.2e-11]  # midpoints 57999.5, 58000.25, 58001.0
-    assert sed.between(58001, 58002).nufnu == [2.9e-11]
-    assert sed.between(None, 58000).nufnu == [1.1e-14]
-    assert sed.between(57999.5, None).points == 3
+    assert sed.between(58000, 58001).nufnu == [2.0, 4.0]
+    assert sed.between(58001, 58002).nufnu == [3.0, 4.0]  # a midpoint on the start counts too
+    assert sed.between(None, 57999.5).nufnu == [1.0]
+    assert sed.between(57999.5, None).points == 4
 
 
 def test_undated_fallback_needs_both_ends():
