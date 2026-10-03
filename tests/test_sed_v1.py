@@ -165,6 +165,18 @@ def test_202_then_done_follows_job_then_fetches_sed(mock_api, client, sleeps):
     assert all(s <= 1.0 for s in sleeps)
 
 
+def test_progress_catalogues_stage():
+    from astro_mmdc.models.sed import SEDEvent, SEDProgress
+
+    p = SEDProgress.model_validate({"stage": "catalogues", "done": 17, "total": 73, "elapsed_s": 8.9,
+                                    "stages": {"catalogues": {"done": 17, "total": 73, "elapsed_s": 8.9},
+                                               "lightcurves": {"done": 1, "total": 3}}})
+    assert (p.stage, p.done, p.total) == ("catalogues", 17, 73)
+    assert p.stages["lightcurves"].done == 1
+    e = SEDEvent.model_validate({"v": 1, "kind": "stage", "phase": "catalogues", "subject": "Catalogues"})
+    assert e.phase == "catalogues" and e.subject == "Catalogues"
+
+
 def test_no_data_raises_with_empty_sed(mock_api, client):
     mock_api.post("/api/sed/").mock(return_value=httpx.Response(
         200, json=envelope("no_data", sed=EMPTY)))

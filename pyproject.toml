@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "astro-mmdc"
-version = "0.2.12"
+version = "0.2.13"
 description = "Python SDK for the MMDC astrophysics platform — SED data access, on-demand Swift UVOT/XRT analysis and blazar broadband emission modeling"
 readme = "README.md"
 license = "BSD-3-Clause"
