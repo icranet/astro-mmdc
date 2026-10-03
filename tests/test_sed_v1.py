@@ -462,7 +462,7 @@ _WEBSITE_UNITS = {
         "freq_ev": 5.789934774400001e-06,
         "erg": 1.1e-14,
         "flux_ev": 6.8662e-15,
-        "flux_norm": 1.1858855526937314e-09,
+        "flux_norm": 204818464.95699468,
         "flux_jyhz": 1100000000.0,
         "flux_wm2": 1.1e-17,
         "nufnu_fnu_jy": 0.7857142857142857,
@@ -471,7 +471,7 @@ _WEBSITE_UNITS = {
         "freq_ev": 5.789934774400001e-06,
         "erg": 3.2e-11,
         "flux_ev": 1.99744e-11,
-        "flux_norm": 3.4498488805635825e-06,
+        "flux_norm": 595835534420.3481,
         "flux_jyhz": 3199999999999.9995,
         "flux_wm2": 3.1999999999999996e-14,
         "nufnu_fnu_jy": 2285.7142857142853,
@@ -480,7 +480,7 @@ _WEBSITE_UNITS = {
         "freq_ev": 0.26964553377920003,
         "erg": 1.1e-14,
         "flux_ev": 6.8662e-15,
-        "flux_norm": 2.5463800211215094e-14,
+        "flux_norm": 0.09443434813968102,
         "flux_jyhz": 1100000000.0,
         "flux_wm2": 1.1e-17,
         "nufnu_fnu_jy": 1.6871165644171778e-05,
@@ -489,7 +489,7 @@ _WEBSITE_UNITS = {
         "freq_ev": 0.26964553377920003,
         "erg": 3.2e-11,
         "flux_ev": 1.99744e-11,
-        "flux_norm": 7.4076509705353e-11,
+        "flux_norm": 274.71810367907204,
         "flux_jyhz": 3199999999999.9995,
         "flux_wm2": 3.1999999999999996e-14,
         "nufnu_fnu_jy": 0.04907975460122699,
@@ -498,7 +498,7 @@ _WEBSITE_UNITS = {
         "freq_ev": 992.56024704,
         "erg": 1.1e-14,
         "flux_ev": 6.8662e-15,
-        "flux_norm": 6.917665724046767e-18,
+        "flux_norm": 6.969517210342182e-09,
         "flux_jyhz": 1100000000.0,
         "flux_wm2": 1.1e-17,
         "nufnu_fnu_jy": 4.583333333333333e-09,
@@ -507,7 +507,7 @@ _WEBSITE_UNITS = {
         "freq_ev": 992.56024704,
         "erg": 3.2e-11,
         "flux_ev": 1.99744e-11,
-        "flux_norm": 2.0124118469954232e-14,
+        "flux_norm": 2.0274959157359073e-05,
         "flux_jyhz": 3199999999999.9995,
         "flux_wm2": 3.1999999999999996e-14,
         "nufnu_fnu_jy": 1.3333333333333332e-05,
@@ -516,7 +516,7 @@ _WEBSITE_UNITS = {
         "freq_ev": 99256024704.0,
         "erg": 1.1e-14,
         "flux_ev": 6.8662e-15,
-        "flux_norm": 6.917665724046768e-26,
+        "flux_norm": 6.969517210342182e-25,
         "flux_jyhz": 1100000000.0,
         "flux_wm2": 1.1e-17,
         "nufnu_fnu_jy": 4.583333333333333e-17,
@@ -525,12 +525,18 @@ _WEBSITE_UNITS = {
         "freq_ev": 99256024704.0,
         "erg": 3.2e-11,
         "flux_ev": 1.99744e-11,
-        "flux_norm": 2.0124118469954232e-22,
+        "flux_norm": 2.0274959157359075e-21,
         "flux_jyhz": 3199999999999.9995,
         "flux_wm2": 3.1999999999999996e-14,
         "nufnu_fnu_jy": 1.333333333333333e-13,
     },
 }
+
+
+def test_dnde_is_nufnu_over_e_squared():
+    # 1e-10 erg cm-2 s-1 at 1 GeV is 6.24e-17 eV-1 cm-2 s-1.
+    (value,) = units.convert_y([1e-10], [1e9 / units.PLANCK_CONST_EV], "dN/dE")
+    assert value == pytest.approx(1e-10 * 6.242e11 / 1e9**2, rel=1e-12)
 
 
 @pytest.mark.parametrize(("freq", "flux"), list(_WEBSITE_UNITS))

@@ -23,7 +23,8 @@ def _erg_to_tev(flux: float, freq_hz: float) -> float:
 
 
 def _erg_to_norm(flux: float, freq_hz: float) -> float:
-    return _erg_to_tev(flux, freq_hz) / _hz_to_ev(freq_hz)
+    # dN/dE = νFν / E², in eV⁻¹ cm⁻² s⁻¹.
+    return flux * ERG_TO_EV / _hz_to_ev(freq_hz) ** 2
 
 
 def _erg_to_wm2(flux: float, freq_hz: float) -> float:
@@ -46,7 +47,7 @@ X_UNITS: dict[str, tuple[Callable[[float], float], str]] = {
 Y_UNITS: dict[str, tuple[Callable[[float, float], float], str]] = {
     "erg cm-2 s-1": (lambda v, f: v, r"$\nu F(\nu)$ [erg cm$^{-2}$ s$^{-1}$]"),
     "TeV cm-2 s-1": (_erg_to_tev, r"$\nu F(\nu)$ [TeV cm$^{-2}$ s$^{-1}$]"),
-    # The website labels this axis dN/dE; it is νFν [TeV cm⁻² s⁻¹] / E [eV].
+    # dN/dE = νFν [eV cm⁻² s⁻¹] / E² [eV²].
     "norm": (_erg_to_norm, r"dN/dE [eV$^{-1}$ cm$^{-2}$ s$^{-1}$]"),
     "Jy Hz": (_erg_to_jyhz, r"$\nu F(\nu)$ [Jy $\times$ Hz]"),
     "W m-2": (_erg_to_wm2, r"$\nu F(\nu)$ [W m$^{-2}$]"),
@@ -98,8 +99,8 @@ def convert_y(
 ) -> list[float | None]:
     """νFν in erg cm⁻² s⁻¹ converted to ``unit``; ``freq_hz`` must be in Hz.
 
-    Units: ``erg cm-2 s-1``, ``TeV cm-2 s-1``, ``norm`` (the website's
-    dN/dE axis), ``Jy Hz``, ``W m-2`` and ``Jy`` (F(ν)). Errors convert the
+    Units: ``erg cm-2 s-1``, ``TeV cm-2 s-1``, ``norm`` (dN/dE in
+    eV⁻¹ cm⁻² s⁻¹), ``Jy Hz``, ``W m-2`` and ``Jy`` (F(ν)). Errors convert the
     same way, since every conversion is linear in νFν.
     """
     fn = Y_UNITS[y_unit(unit)][0]

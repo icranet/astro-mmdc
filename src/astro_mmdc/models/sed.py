@@ -290,7 +290,7 @@ class SED(BaseModel):
         """The points in the website's axis units: ``{"x", "y", "y_err"}`` lists.
 
         ``x``: ``Hz`` or ``eV``. ``y``: ``erg cm-2 s-1``, ``TeV cm-2 s-1``,
-        ``norm`` (the website's dN/dE), ``Jy Hz``, ``W m-2`` or ``Jy``. The
+        ``norm`` (dN/dE in eV⁻¹ cm⁻² s⁻¹), ``Jy Hz``, ``W m-2`` or ``Jy``. The
         website's axis keys (``freq_ev``, ``flux_jyhz``, ...) work too.
         """
         return {
