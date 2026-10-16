@@ -1,3 +1,8 @@
+---
+title: "Changelog"
+description: "What changed in each astro-mmdc Python SDK release, newest first: new methods and fields, server changes that affect results, fixes and docs."
+---
+
 # Changelog
 
 Release notes for every version are on [GitHub Releases](https://github.com/icranet/astro-mmdc/releases).

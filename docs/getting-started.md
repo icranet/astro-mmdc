@@ -1,3 +1,8 @@
+---
+title: "Install the MMDC Python SDK (astro-mmdc) - Getting started"
+description: "Install the astro-mmdc Python SDK with pip or uv, create an MMDC client, identify your application and run a first SED query and SSC fit."
+---
+
 # Getting started
 
 ## Installation

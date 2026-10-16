@@ -1,6 +1,6 @@
 ---
 title: "MMDC documentation"
-description: "Documentation of the Markarian Multiwavelength Data Center (MMDC, mmdc.am): multiwavelength SEDs of blazars, SSC, EIC and hadronic emission modeling and fitting, on the website and with the astro-mmdc Python SDK."
+description: "MMDC (mmdc.am) documentation: multiwavelength SEDs and light curves of blazars, SSC, EIC and hadronic model fits, on the website or in Python."
 ---
 
 # MMDC documentation
@@ -44,6 +44,8 @@ print(sed.source.redshift, sed.points)
     - [Results & errors](guides/results-errors.md): working with fit results and handling errors.
     - [Advanced](guides/advanced.md): manual job control, synchronous inference, the `BatchResult` reference.
 - [API reference](api.md): every method of the four resource namespaces.
+- [Changelog](changelog.md): what changed in each SDK release.
+- [Citing](citing.md): the MMDC paper in BibTeX, the SDK DOI and the data license.
 
 ## Links
 

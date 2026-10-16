@@ -1,3 +1,8 @@
+---
+title: "Citing"
+description: "How to cite MMDC in a paper: Sahakyan et al. 2024, AJ, 168, 289 with BibTeX, the astro-mmdc software DOI on Zenodo and the CC BY 4.0 data license."
+---
+
 # Citing
 
 If you use MMDC data, models or this SDK in your research, please cite the MMDC paper

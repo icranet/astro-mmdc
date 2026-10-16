@@ -1,3 +1,8 @@
+---
+title: "SED data"
+description: "Get the multiwavelength SED of any sky position with client.sed.get(): points and epochs, time filters, CSV export, plots and the older SED API."
+---
+
 # SED data
 
 ## Getting an SED

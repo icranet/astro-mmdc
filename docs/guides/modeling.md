@@ -1,3 +1,8 @@
+---
+title: "Blazar emission modeling"
+description: "Fit SSC, EIC and hadronic blazar emission models to an SED with astro-mmdc: the CSV input format, validation, fixed and neutrino parameters."
+---
+
 # Blazar emission modeling
 
 MMDC supports three blazar broadband emission models:

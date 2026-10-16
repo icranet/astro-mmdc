@@ -1,6 +1,6 @@
 ---
 title: "Fitting a blazar SED on mmdc.am"
-description: "Fit the SSC, EIC or lepto-hadronic model to your own blazar SED on mmdc.am with MultiNest; the data file format, the fit options, the emailed results and the corner plot."
+description: "Fit the SSC, EIC or lepto-hadronic model to your own blazar SED on mmdc.am with MultiNest: data file format, options, emailed result, corner plot."
 ---
 
 # Fitting your SED

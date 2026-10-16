@@ -1,3 +1,8 @@
+---
+title: "Swift UVOT/XRT analysis"
+description: "Run the MADAM pipeline on Swift UVOT and XRT data at a sky position, by MJD window or obsid list; instruments, the coverage cache and run times."
+---
+
 # Swift UVOT/XRT analysis
 
 `client.madam` runs the MADAM pipeline on Swift data for a sky position, on demand. Results are ingested into the observations catalog (`MMDCOUV` for UVOT, `MMDCXRT` / `MMDCXRT_ORBIT` for XRT), so anything already analysed at that position is answered from cache without a new run.

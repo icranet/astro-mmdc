@@ -1,6 +1,6 @@
 ---
 title: "Using MMDC from scripts and AI agents"
-description: "How scripts, pipelines and AI agents should call MMDC (mmdc.am): identification, name resolution, SEDs, light curves, model fits, Swift analysis, raw HTTP with Prefer: wait, limits and citation."
+description: "Rules and recipes for scripts, pipelines and AI agents calling MMDC: identification, name lookup, SEDs, fits, Swift runs, raw HTTP and limits."
 ---
 
 # Using MMDC from scripts and AI agents

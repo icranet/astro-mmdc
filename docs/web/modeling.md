@@ -1,6 +1,6 @@
 ---
 title: "Blazar SED modeling on mmdc.am (SSC, EIC, hadronic)"
-description: "Compute the broadband SED of a blazar on mmdc.am with the synchrotron self-Compton (SSC), external inverse Compton (EIC) or lepto-hadronic model; every parameter, its range and meaning."
+description: "Compute the broadband SED of a blazar on mmdc.am with the SSC, EIC or lepto-hadronic model; what every parameter means and its allowed range."
 ---
 
 # Blazar SED modeling

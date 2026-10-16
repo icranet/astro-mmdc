@@ -1,6 +1,6 @@
 ---
 title: "Getting SED data on mmdc.am"
-description: "How to build the multiwavelength spectral energy distribution (SED) of a blazar or any sky position on mmdc.am, filter it in time, explore it and download it as CSV."
+description: "Build the multiwavelength SED of a blazar or any sky position on mmdc.am, filter it in time, explore the plot and download the data as CSV."
 ---
 
 # Getting SED data
