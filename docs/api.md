@@ -1,3 +1,8 @@
+---
+title: "API reference"
+description: "API reference of the astro-mmdc Python SDK: every public method of client.sed, client.modeling, client.observations and client.madam, in tables."
+---
+
 # API reference
 
 Every public method of the four resource namespaces on an `MMDC` client. The [guides](guides/sed.md) show them in use, and [Advanced](guides/advanced.md#batchresult-object-reference) lists the fields of a `BatchResult`.

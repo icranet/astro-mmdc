@@ -1,3 +1,8 @@
+---
+title: "Observations"
+description: "Query the MMDC observations catalogue (Fermi, Swift, NuSTAR, ZTF, ASAS-SN) with filters or a cone search, for SED points and light curves."
+---
+
 # Observations
 
 Direct access to the unified observations catalog — 12.4M rows of multi-wavelength data spanning both per-frequency SED measurements and time-series lightcurves, distinguished by an `is_lightcurve` flag.

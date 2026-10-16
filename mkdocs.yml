@@ -47,6 +47,9 @@ markdown_extensions:
 
 plugins:
   - search
+  - git-revision-date-localized:
+      type: date
+      fallback_to_build_date: true
   - llmstxt:
       full_output: llms-full.txt
       markdown_description: |

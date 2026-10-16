@@ -1,3 +1,8 @@
+---
+title: "Results & errors"
+description: "Read astro-mmdc fit results (best-fit values, errors, fixed parameters, download links) and handle SDK exceptions, timeouts and automatic retries."
+---
+
 # Results & errors
 
 ## Working with Results

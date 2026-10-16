@@ -1,3 +1,8 @@
+---
+title: "Advanced"
+description: "Manual control of SED, modeling and Swift jobs in astro-mmdc: submit and poll, batches of many sources, synchronous inference, BatchResult fields."
+---
+
 # Advanced
 
 ## Manual Job Control
