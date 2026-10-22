@@ -68,7 +68,7 @@ slightly different ranges (see [Fitting your SED](fitting.md#the-priors)).
 
 | Parameter | Meaning | Range |
 |---|---|---|
-| δ | Doppler factor of the emitting region | 3 – 50 |
+| δ | Doppler factor of the emitting region | 3 – 100 |
 | log R | comoving radius of the blob [cm] | 15 – 18 |
 | log B | comoving magnetic field [G] | −3 – 2 |
 | p | power-law index of the electrons | 1.8 – 5 |
@@ -85,7 +85,7 @@ The SSC parameters (with slightly different ranges), plus the external photon fi
 
 | Parameter | Meaning | Range |
 |---|---|---|
-| δ | Doppler factor | 3 – 50 |
+| δ | Doppler factor | 3 – 100 |
 | log R | comoving blob radius [cm] | 15 – 18 |
 | log B | comoving magnetic field [G] | −3 – 2.5 |
 | p | power-law index of the electrons | 1.8 – 5 |
