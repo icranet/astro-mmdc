@@ -65,12 +65,14 @@ class BaseClient:
         idempotent: bool = False,
         raise_for_status: bool = True,
         deadline: float | None = None,
+        cap_to_deadline: bool = False,
         **kwargs: Any,
     ) -> httpx.Response:
         # POSTs are replayed only when the call carries an Idempotency-Key or
         # the endpoint is idempotent — a bare POST retry could duplicate jobs.
         # raise_for_status=False hands error responses back to the caller;
-        # deadline (time.monotonic()) stops retries that would sleep past it.
+        # deadline (time.monotonic()) stops retries that would sleep past it;
+        # cap_to_deadline also limits each attempt's timeouts to the time left.
         retryable = (
             idempotent
             or method.upper() in _ALWAYS_RETRYABLE_METHODS
@@ -80,8 +82,19 @@ class BaseClient:
             kwargs["headers"] = {**self._extra_headers, **(kwargs.get("headers") or {})}
         last_exc: Exception | None = None
         for attempt in range(_MAX_RETRIES):
+            attempt_kwargs = kwargs
+            if cap_to_deadline and deadline is not None:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    if last_exc is not None:
+                        raise last_exc
+                    raise httpx.TimeoutException("deadline passed before the request was sent")
+                attempt_kwargs = {
+                    **kwargs,
+                    "timeout": _cap_timeout(kwargs.get("timeout", self._client.timeout), remaining),
+                }
             try:
-                response = self._client.request(method, path, **kwargs)
+                response = self._client.request(method, path, **attempt_kwargs)
             except httpx.TransportError as exc:
                 if not retryable:
                     raise
@@ -141,6 +154,18 @@ class BaseClient:
 
     def __exit__(self, *args: object) -> None:
         self.close()
+
+
+def _cap_timeout(timeout: Any, limit: float) -> httpx.Timeout:
+    t = httpx.Timeout(timeout)
+    return httpx.Timeout(
+        connect=_min(t.connect, limit), read=_min(t.read, limit),
+        write=_min(t.write, limit), pool=_min(t.pool, limit),
+    )
+
+
+def _min(value: float | None, limit: float) -> float:
+    return limit if value is None else min(value, limit)
 
 
 def _past(deadline: float | None, delay: float) -> bool:

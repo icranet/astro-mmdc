@@ -1,4 +1,5 @@
 import io
+import time
 from unittest.mock import patch
 
 import httpx
@@ -117,3 +118,17 @@ def test_no_warning_without_header(mock_api, client, capsys):
     )
     client.modeling.get_batch_result("uuid-1")
     assert capsys.readouterr().err == ""
+
+
+def test_cap_to_deadline_never_sends_past_the_deadline(mock_api, client):
+    # No route: a request that went out would fail with respx's error instead.
+    with pytest.raises(httpx.TimeoutException):
+        client._base.request(
+            "GET", "/api/ping/", deadline=time.monotonic() - 1, cap_to_deadline=True
+        )
+
+
+def test_deadline_alone_does_not_cap_the_attempt(mock_api, client):
+    route = mock_api.get("/api/ping/").mock(return_value=httpx.Response(200))
+    client._base.request("GET", "/api/ping/", deadline=time.monotonic() + 1)
+    assert route.calls.last.request.extensions["timeout"]["read"] == 30
