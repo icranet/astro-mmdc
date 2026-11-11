@@ -61,8 +61,9 @@ plugins:
         Rules for programmatic clients (scripts, pipelines, AI agents):
 
         - Positions are ICRS right ascension and declination in degrees.
-        - Resolve a name first: POST https://mmdc.am/api/autocomplete/ with {"query": "Mrk 421"}
-          answers {"results": [{"name", "ra", "dec", "refcatalog"}]}; astropy's SkyCoord.from_name also works.
+        - Resolve a name first: `client.catalogs.autocomplete("Mrk 421")`, or POST https://mmdc.am/api/autocomplete/
+          with {"query": "Mrk 421"}, answers {"results": [{"name", "ra", "dec", "refcatalog"}]};
+          astropy's SkyCoord.from_name also works.
         - Identify yourself. The SDK sends User-Agent astro-mmdc/<version>; `MMDC(app="your-project")`
           adds an X-MMDC-Client header. Raw HTTP must send X-MMDC-Client, otherwise the modeling POSTs
           answer HTTP 426.

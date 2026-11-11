@@ -42,8 +42,17 @@ IP address. An `api_key` (sent as `X-API-Key`) gives a higher limit on concurren
 
 ## Resolve a name to a position
 
-MMDC's own name lookup is `POST https://mmdc.am/api/autocomplete/` with `{"query": "<name>"}`.
-It answers `{"results": [{"name", "ra", "dec", "refcatalog"}, ...]}`, positions in degrees:
+MMDC's own name lookup is `client.catalogs.autocomplete(query)`. It returns up to 40 catalogue
+entries with `name`, `ra`, `dec` (degrees) and `refcatalog`, or an empty list:
+
+```python
+hits = client.catalogs.autocomplete("Mrk 421")   # [CatalogueEntry(name="MRK421", ra=166.1138, ...)]
+ra, dec = hits[0].ra, hits[0].dec
+```
+
+A name matches as a substring, ignoring case and spaces; a name not in the catalogue is resolved
+with NED, then SIMBAD. Over raw HTTP it is `POST https://mmdc.am/api/autocomplete/` with
+`{"query": "<name>"}`, answering `{"results": [{"name", "ra", "dec", "refcatalog"}, ...]}`:
 
 ```python
 import httpx

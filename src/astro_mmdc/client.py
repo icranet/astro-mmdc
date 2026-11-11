@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 
 from astro_mmdc._base import BaseClient
+from astro_mmdc.resources.catalogs import CatalogsResource
 from astro_mmdc.resources.madam import MadamResource
 from astro_mmdc.resources.modeling import ModelingResource
 from astro_mmdc.resources.observations import ObservationsResource
@@ -25,6 +26,7 @@ class MMDC:
             result = client.modeling.batch_infer("data.csv", z=0.158, ebl=True, model_type="SSC")
             rows = client.observations.cone_search(ra=187.28, dec=2.05, radius_arcsec=10)
             uvot = client.madam.analyze(ra=166.11, dec=38.21, mjd_start=58849, mjd_end=59031)
+            hits = client.catalogs.autocomplete("Mrk 421")
 
     ``app`` names your application to the API (sent as ``X-MMDC-Client``);
     ``api_key`` authenticates for higher rate/concurrency tiers (sent as ``X-API-Key``);
@@ -51,6 +53,7 @@ class MMDC:
         self.modeling = ModelingResource(self._base)
         self.observations = ObservationsResource(self._base)
         self.madam = MadamResource(self._base)
+        self.catalogs = CatalogsResource(self._base)
 
     def for_user(self, end_user: str | int | None) -> MMDC:
         """A client that attributes its requests to ``end_user``.

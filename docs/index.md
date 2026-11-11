@@ -43,7 +43,7 @@ print(sed.source.redshift, sed.points)
     - [Blazar emission modeling](guides/modeling.md): SSC, EIC and hadronic model fits.
     - [Results & errors](guides/results-errors.md): working with fit results and handling errors.
     - [Advanced](guides/advanced.md): manual job control, synchronous inference, the `BatchResult` reference.
-- [API reference](api.md): every method of the four resource namespaces.
+- [API reference](api.md): every method of the five resource namespaces.
 - [Changelog](changelog.md): what changed in each SDK release.
 - [Citing](citing.md): the MMDC paper in BibTeX, the SDK DOI and the data license.
 
