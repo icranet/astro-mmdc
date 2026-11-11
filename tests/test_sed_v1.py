@@ -460,6 +460,19 @@ def test_window_sends_undated_false_unless_given(mock_api, client):
     assert "undated" not in route.calls.last.request.url.params
 
 
+def test_csv_axes_sent_only_when_given(mock_api, client):
+    route = mock_api.get(f"/api/sed/{JID}/").mock(return_value=httpx.Response(200, text=SERVER_CSV))
+    client.sed.csv(JID, x_axis="freq_ev", y_axis="nufnu_fnu_jy")
+    q = route.calls.last.request.url.params
+    assert q["format"] == "csv" and q["x_axis"] == "freq_ev" and q["y_axis"] == "nufnu_fnu_jy"
+    client.sed.csv(JID, y_axis="flux_norm")
+    q = route.calls.last.request.url.params
+    assert q["y_axis"] == "flux_norm" and "x_axis" not in q
+    client.sed.csv(JID)
+    q = route.calls.last.request.url.params
+    assert "x_axis" not in q and "y_axis" not in q
+
+
 def test_select_and_exclude():
     sed = make_sed()
     assert sed.select(["NEOWISE"]).catalog == ["NEOWISE", "NEOWISE"]
