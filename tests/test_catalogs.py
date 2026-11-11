@@ -5,7 +5,7 @@ import httpx
 import pytest
 
 from astro_mmdc import APIError
-from astro_mmdc.models.catalogs import CatalogueEntry
+from astro_mmdc.models.catalogs import CatalogEntry
 
 
 def test_autocomplete_returns_typed_entries(mock_api, client):
@@ -17,7 +17,7 @@ def test_autocomplete_returns_typed_entries(mock_api, client):
     )
     hits = client.catalogs.autocomplete("cta102")
     assert json.loads(route.calls.last.request.content) == {"query": "cta102"}
-    assert all(isinstance(h, CatalogueEntry) for h in hits)
+    assert all(isinstance(h, CatalogEntry) for h in hits)
     assert hits[0].name == "CTA102"
     assert hits[0].ra == 338.151667
     assert hits[0].dec == 11.7308333
@@ -58,3 +58,23 @@ def test_autocomplete_retries_transient_5xx(mock_api, client):
     with patch("astro_mmdc._base.time.sleep"):
         assert client.catalogs.autocomplete("mrk 421") == []
     assert route.call_count == 2
+
+
+def test_autocomplete_waits_past_proxy_timeout(mock_api, client):
+    route = mock_api.post("/api/autocomplete/").mock(
+        return_value=httpx.Response(200, json={"results": []})
+    )
+    client.catalogs.autocomplete("mrk 421")
+    timeout = route.calls.last.request.extensions["timeout"]
+    assert timeout["read"] > 60
+    assert timeout["connect"] == client._base._client.timeout.connect
+
+
+def test_autocomplete_stops_retrying_at_deadline(mock_api, client):
+    route = mock_api.post("/api/autocomplete/").mock(return_value=httpx.Response(504))
+    clock = iter([0.0, 200.0])  # deadline set at t=0, first 504 back at t=200
+    with patch("astro_mmdc._base.time.sleep"), \
+         patch("time.monotonic", side_effect=lambda: next(clock)):
+        with pytest.raises(APIError):
+            client.catalogs.autocomplete("unknown name")
+    assert route.call_count == 1

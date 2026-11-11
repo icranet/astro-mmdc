@@ -56,4 +56,4 @@ Every public method of the five resource namespaces on an `MMDC` client. The [gu
 
 | Method | Description |
 |---|---|
-| `autocomplete(query)` | Look up a source name (or `"RA DEC"`) in MMDC's source catalogue; returns up to 40 `CatalogueEntry` (`name`, `ra`, `dec`, `refcatalog`) |
+| `autocomplete(query)` | Look up a source name, `"RA DEC"` or an RA in MMDC's source catalogue; returns up to 40 `CatalogEntry` (`name`, `ra`, `dec`, `refcatalog`), unordered, so check `name`. Unknown names go to NED/SIMBAD while your IP is under 100 unresolved names per hour, then return `[]` ([details](agents.md#resolve-a-name-to-a-position)) |
