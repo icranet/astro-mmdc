@@ -62,9 +62,22 @@ only while your IP is under 100 unresolved names per hour; past that an unknown 
 Behind `client.for_user()` all your end users share your server's IP. The query can also be a
 position, `"RA DEC"` or `"RA,DEC"` in degrees (out of range gives HTTP 400), or a single number,
 searched as RA only.
-An interactive caller with its own fallback (a chat turn, a search box) can cap the wait with
-`client.catalogs.autocomplete("Mrk 421", timeout=10)`; a slower lookup then raises
-`httpx.ReadTimeout`. Without it the call waits up to 75 s per request and retries for up to 150 s.
+An interactive caller with its own fallback (a chat turn, a search box) can cap the wait, retries
+included. Each attempt is limited to the time left, so the call returns in about `timeout` seconds
+(connect and read are separate phases, so the worst case is a bit under twice that):
+
+```python
+import httpx
+from astro_mmdc import MMDCError
+
+try:
+    hits = client.catalogs.autocomplete("Mrk 421", timeout=10)
+except (httpx.TransportError, MMDCError):   # timeouts, or a 503/504 at the deadline
+    hits = []
+```
+
+`timeout=None`, the default, waits up to 75 s per request (past the server proxy's 60 s) and
+150 s in all; unlike `client.sed`, it does not mean wait forever.
 
 Over raw HTTP it is `POST https://mmdc.am/api/autocomplete/` with `{"query": "<name>"}`, answering
 `{"results": [{"name", "ra", "dec", "refcatalog"}, ...]}`:

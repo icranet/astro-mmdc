@@ -9,7 +9,7 @@ Release notes for every version are on [GitHub Releases](https://github.com/icra
 
 ## 0.2.16
 
-- `client.catalogs.autocomplete()` takes `timeout`: seconds to wait, retries included, for interactive callers with their own fallback. Left out, it still waits up to 75 s per request and 150 s in all for a slow NED/SIMBAD lookup.
+- `client.catalogs.autocomplete()` takes `timeout`, for interactive callers with their own fallback: each attempt, retries included, is limited to the time left, so the call returns in about `timeout` seconds (a bit under twice that at worst, as connect and read are separate phases). Catch `httpx.TransportError` and `MMDCError`. `None`, the default, still waits up to 75 s per request and 150 s in all.
 
 ## 0.2.15
 
