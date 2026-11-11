@@ -547,6 +547,8 @@ class SEDResource:
         mjd_end: float | None = None,
         catalogs: Iterable[str] | None = None,
         undated: bool | None = None,
+        x_axis: str | None = None,
+        y_axis: str | None = None,
     ) -> str:
         """The server's CSV of a finished SED; also written to ``dest`` if given.
 
@@ -554,10 +556,17 @@ class SEDResource:
         dropped when a window is given and kept otherwise, unless ``undated``
         is ``True`` (keep) or ``False`` (drop).
 
+        ``x_axis``/``y_axis`` take the website's axis keys (as in :meth:`get_data`);
+        the server converts those columns and renames them. Default: Hz and erg cm⁻² s⁻¹.
+
         Raises :class:`SEDNotReady` while the job runs and :class:`SEDJobFailed`
         for a failed job.
         """
         params = {"format": "csv", **_filter_params(mjd_start, mjd_end, catalogs, undated)}
+        if x_axis is not None:
+            params["x_axis"] = x_axis
+        if y_axis is not None:
+            params["y_axis"] = y_axis
         response, _ = self._call("GET", f"/api/sed/{id}/", params=params, parse=False)
         if dest is not None:
             Path(dest).write_bytes(response.content)

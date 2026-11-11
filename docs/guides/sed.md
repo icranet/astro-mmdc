@@ -183,6 +183,24 @@ data = client.sed.get_data(
 | `"flux_wm2"` | W/m² |
 | `"nufnu_fnu_jy"` | Fν in Jy |
 
+The server's CSV of a job takes the same keys (`hz` and `erg` are the defaults):
+
+```python
+client.sed.csv(job.id, "mrk421_ev_jy.csv", x_axis="freq_ev", y_axis="nufnu_fnu_jy")
+```
+
+The converted columns are renamed and the error uses the same unit as its value; the other
+columns stay as they are. A point at frequency 0 has empty `dnde` and `fnu_jy` values.
+
+| key | CSV columns |
+|---|---|
+| `x_axis="freq_ev"` | `energy_ev` (eV) instead of `freq_hz` |
+| `y_axis="flux_ev"` | `nufnu_tev`, `nufnu_tev_err` |
+| `y_axis="flux_norm"` | `dnde`, `dnde_err` |
+| `y_axis="flux_jyhz"` | `nufnu_jyhz`, `nufnu_jyhz_err` |
+| `y_axis="flux_wm2"` | `nufnu_wm2`, `nufnu_wm2_err` |
+| `y_axis="nufnu_fnu_jy"` | `fnu_jy`, `fnu_jy_err` |
+
 ### Source Metadata
 
 ```python
