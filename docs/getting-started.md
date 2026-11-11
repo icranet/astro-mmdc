@@ -64,12 +64,13 @@ def handle(request):
 
 Writing a script, pipeline or AI agent? [Using MMDC from scripts and AI agents](agents.md) lists the rules such clients should follow (identification, waiting, limits) and a recipe per task.
 
-The client provides four resource namespaces:
+The client provides five resource namespaces:
 
 - `client.sed`: multi-wavelength SED of any sky position ([guide](guides/sed.md))
 - `client.modeling`: blazar emission modeling, SSC, EIC and hadronic ([guide](guides/modeling.md))
 - `client.observations`: unified observations catalog, SED + lightcurve ([guide](guides/observations.md))
 - `client.madam`: on-demand Swift UVOT/XRT analysis, MADAM pipeline ([guide](guides/swift.md))
+- `client.catalogs`: source name lookup, name to position ([how to](agents.md#resolve-a-name-to-a-position))
 
 ## Quick start
 

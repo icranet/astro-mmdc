@@ -53,6 +53,7 @@ The [Getting started](https://docs.mmdc.am/getting-started/) page has more examp
 ## What you can do
 
 - **SED data**: the SED at any sky position, with filters, unit conversion, CSV export and plots. See the [SED data guide](https://docs.mmdc.am/guides/sed/).
+- **Name lookup**: resolve a source name to a position with `client.catalogs.autocomplete("Mrk 421")`. See [Resolve a name to a position](https://docs.mmdc.am/agents/#resolve-a-name-to-a-position).
 - **Observations and light curves**: filtered queries and cone searches over the unified observations catalogue (Fermi, Swift, NuSTAR, ZTF, ASAS-SN, ...). See the [observations guide](https://docs.mmdc.am/guides/observations/).
 - **Swift UVOT/XRT analysis**: on-demand photometry and XRT spectral fits through the MADAM pipeline, with a coverage cache. See the [Swift guide](https://docs.mmdc.am/guides/swift/).
 - **Blazar emission modeling**: SSC, EIC and hadronic model fits and synchronous inference. See the [modeling guide](https://docs.mmdc.am/guides/modeling/).

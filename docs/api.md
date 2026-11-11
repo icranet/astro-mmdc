@@ -1,11 +1,11 @@
 ---
 title: "API reference"
-description: "API reference of the astro-mmdc Python SDK: every public method of client.sed, client.modeling, client.observations and client.madam, in tables."
+description: "API reference of the astro-mmdc Python SDK: every public method of client.sed, client.modeling, client.observations, client.madam and client.catalogs, in tables."
 ---
 
 # API reference
 
-Every public method of the four resource namespaces on an `MMDC` client. The [guides](guides/sed.md) show them in use, and [Advanced](guides/advanced.md#batchresult-object-reference) lists the fields of a `BatchResult`.
+Every public method of the five resource namespaces on an `MMDC` client. The [guides](guides/sed.md) show them in use, and [Advanced](guides/advanced.md#batchresult-object-reference) lists the fields of a `BatchResult`.
 
 ## `client.sed`
 
@@ -51,3 +51,9 @@ Every public method of the four resource namespaces on an `MMDC` client. The [gu
 | `get(uuid, include_results=True, limit=None)` | Fetch a job, optionally without its rows |
 | `wait_for_completion(uuid, poll_interval=60, max_minutes=240, limit=None)` | Poll until done / no_data; raises `AnalysisJobError` on error |
 | `analyze(ra, dec, ..., limit=None, poll_interval=60, max_minutes=240)` | Submit and wait |
+
+## `client.catalogs`
+
+| Method | Description |
+|---|---|
+| `autocomplete(query)` | Look up a source name, `"RA DEC"` or an RA in MMDC's source catalogue; returns up to 40 `CatalogEntry` (`name`, `ra`, `dec`, `refcatalog`), unordered, so check `name`. Unknown names go to NED/SIMBAD while your IP is under 100 unresolved names per hour, then return `[]` ([details](agents.md#resolve-a-name-to-a-position)) |

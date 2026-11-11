@@ -42,8 +42,29 @@ IP address. An `api_key` (sent as `X-API-Key`) gives a higher limit on concurren
 
 ## Resolve a name to a position
 
-MMDC's own name lookup is `POST https://mmdc.am/api/autocomplete/` with `{"query": "<name>"}`.
-It answers `{"results": [{"name", "ra", "dec", "refcatalog"}, ...]}`, positions in degrees:
+MMDC's own name lookup is `client.catalogs.autocomplete(query)`. It returns up to 40 catalogue
+entries with `name`, `ra`, `dec` (degrees) and `refcatalog`, or an empty list. A name matches as a
+substring, ignoring case and spaces, and the entries come in no particular order, so pick the one
+whose name you asked for instead of taking the first:
+
+```python
+hits = client.catalogs.autocomplete("Mrk 421")
+# [CatalogEntry(name='MRK421', ra=166.1138, dec=38.20883, refcatalog='INTREFCAT')]
+want = "mrk421"
+match = next((h for h in hits if h.name.replace(" ", "").lower() == want), None)
+if match is None:
+    raise SystemExit(f"no exact match: {[h.name for h in hits]}")
+ra, dec = match.ra, match.dec
+```
+
+A name not in the catalogue is resolved with NED, then SIMBAD (this can take up to a minute), but
+only while your IP is under 100 unresolved names per hour; past that an unknown name returns `[]`.
+Behind `client.for_user()` all your end users share your server's IP. The query can also be a
+position, `"RA DEC"` or `"RA,DEC"` in degrees (out of range gives HTTP 400), or a single number,
+searched as RA only.
+
+Over raw HTTP it is `POST https://mmdc.am/api/autocomplete/` with `{"query": "<name>"}`, answering
+`{"results": [{"name", "ra", "dec", "refcatalog"}, ...]}`:
 
 ```python
 import httpx
@@ -51,7 +72,8 @@ import httpx
 r = httpx.post("https://mmdc.am/api/autocomplete/", json={"query": "Mrk 421"},
                headers={"X-MMDC-Client": "my-pipeline"})
 hits = r.json()["results"]   # [{"name": "MRK421", "ra": 166.1138, "dec": 38.20883, ...}]
-ra, dec = hits[0]["ra"], hits[0]["dec"]
+match = next(h for h in hits if h["name"].replace(" ", "").lower() == "mrk421")
+ra, dec = match["ra"], match["dec"]
 ```
 
 A query can match several entries (`3C 273` gives two); pick one, or ask the user. Astropy's
