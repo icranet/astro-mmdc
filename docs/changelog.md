@@ -7,6 +7,10 @@ description: "What changed in each astro-mmdc Python SDK release, newest first: 
 
 Release notes for every version are on [GitHub Releases](https://github.com/icranet/astro-mmdc/releases).
 
+## 0.2.16
+
+- `client.catalogs.autocomplete()` takes `timeout`: seconds to wait, retries included, for interactive callers with their own fallback. Left out, it still waits up to 75 s per request and 150 s in all for a slow NED/SIMBAD lookup.
+
 ## 0.2.15
 
 - `client.sed.csv()` takes `x_axis` and `y_axis` (the website's axis keys, as in `get_data()`): the server returns the CSV in those units, with the converted columns renamed (for example `energy_ev`, `fnu_jy`, `fnu_jy_err`) and the units at the end of the file name. An unknown value raises `ValidationError` (HTTP 400). Left out, `hz` or `erg`, the CSV is unchanged.

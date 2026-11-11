@@ -62,6 +62,9 @@ only while your IP is under 100 unresolved names per hour; past that an unknown 
 Behind `client.for_user()` all your end users share your server's IP. The query can also be a
 position, `"RA DEC"` or `"RA,DEC"` in degrees (out of range gives HTTP 400), or a single number,
 searched as RA only.
+An interactive caller with its own fallback (a chat turn, a search box) can cap the wait with
+`client.catalogs.autocomplete("Mrk 421", timeout=10)`; a slower lookup then raises
+`httpx.ReadTimeout`. Without it the call waits up to 75 s per request and retries for up to 150 s.
 
 Over raw HTTP it is `POST https://mmdc.am/api/autocomplete/` with `{"query": "<name>"}`, answering
 `{"results": [{"name", "ra", "dec", "refcatalog"}, ...]}`:

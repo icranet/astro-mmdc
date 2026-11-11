@@ -78,3 +78,38 @@ def test_autocomplete_stops_retrying_at_deadline(mock_api, client):
         with pytest.raises(APIError):
             client.catalogs.autocomplete("unknown name")
     assert route.call_count == 1
+
+
+def test_autocomplete_timeout_sets_request_timeout(mock_api):
+    from astro_mmdc import MMDC
+
+    route = mock_api.post("/api/autocomplete/").mock(
+        return_value=httpx.Response(200, json={"results": []})
+    )
+    with MMDC(timeout=30) as c:
+        c.catalogs.autocomplete("mrk 421", timeout=10)
+        c.catalogs.autocomplete("mrk 421", timeout=0.5)
+    first, second = (call.request.extensions["timeout"] for call in route.calls)
+    assert first["read"] == 10 and first["connect"] == 10
+    assert second["read"] == 0.5 and second["connect"] == 0.5
+
+
+def test_autocomplete_timeout_stops_retries(mock_api, client):
+    route = mock_api.post("/api/autocomplete/").mock(return_value=httpx.Response(503))
+    clock = iter([0.0, 9.5])  # deadline at t=10, first 503 back at t=9.5, backoff passes 10
+    with patch("astro_mmdc._base.time.sleep") as sleep, \
+         patch("time.monotonic", side_effect=lambda: next(clock)):
+        with pytest.raises(APIError):
+            client.catalogs.autocomplete("unknown name", timeout=10)
+    assert route.call_count == 1
+    sleep.assert_not_called()
+
+
+def test_autocomplete_timeout_read_timeout_not_retried(mock_api, client):
+    route = mock_api.post("/api/autocomplete/").mock(side_effect=httpx.ReadTimeout("slow"))
+    clock = iter([0.0, 10.0])
+    with patch("astro_mmdc._base.time.sleep"), \
+         patch("time.monotonic", side_effect=lambda: next(clock)):
+        with pytest.raises(httpx.ReadTimeout):
+            client.catalogs.autocomplete("unknown name", timeout=10)
+    assert route.call_count == 1

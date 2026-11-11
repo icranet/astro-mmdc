@@ -16,7 +16,7 @@ class CatalogsResource:
     def __init__(self, client: BaseClient) -> None:
         self._client = client
 
-    def autocomplete(self, query: str) -> list[CatalogEntry]:
+    def autocomplete(self, query: str, *, timeout: float | None = None) -> list[CatalogEntry]:
         """Look up sources by name or position in MMDC's source catalogue.
 
         Parameters
@@ -27,6 +27,14 @@ class CatalogsResource:
             ``"RA DEC"`` or ``"RA,DEC"`` in degrees; or a single number,
             searched as RA only. A position out of range raises ``APIError``
             (HTTP 400).
+        timeout : float, optional
+            Seconds to wait for an answer, retries included: the read timeout
+            of each request, and no retry starts after it. Pass it from
+            interactive callers with their own fallback (a chat turn, a search
+            box), for example ``timeout=10``; a slow NED/SIMBAD lookup then
+            raises ``httpx.ReadTimeout`` instead of holding the caller. Left
+            out, the call waits up to 75 s per request, past the server proxy's
+            60 s, and retries for up to 150 s.
 
         Returns
         -------
@@ -45,13 +53,19 @@ class CatalogsResource:
         ``name`` and ``refcatalog="INPUT"``.
         """
         base = self._client._client.timeout
-        read = _READ_TIMEOUT if base.read is None else max(base.read, _READ_TIMEOUT)
+        connect = base.connect
+        if timeout is None:
+            read = _READ_TIMEOUT if base.read is None else max(base.read, _READ_TIMEOUT)
+            total = _TOTAL_SECONDS
+        else:
+            read = total = timeout
+            connect = timeout if connect is None else min(connect, timeout)
         response = self._client.request(
             "POST",
             "/api/autocomplete/",
             json={"query": query},
             idempotent=True,
-            deadline=time.monotonic() + _TOTAL_SECONDS,
-            timeout=httpx.Timeout(connect=base.connect, read=read, write=base.write, pool=base.pool),
+            deadline=time.monotonic() + total,
+            timeout=httpx.Timeout(connect=connect, read=read, write=base.write, pool=base.pool),
         )
         return [CatalogEntry.model_validate(row) for row in response.json()["results"]]
